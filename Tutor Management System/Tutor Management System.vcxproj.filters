@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="G8.cpp">
+    <ClCompile Include="Tutor - Doubly Linked List.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
