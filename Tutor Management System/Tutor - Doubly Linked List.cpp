@@ -1,16 +1,21 @@
 #include <iostream>
 #include <string>
+#include <regex>
+#include <iomanip>
+#include "Validation.h"
 
 using namespace std;
+
+int sizeofLinkedList = 0; // initialize size of linked list to 0
 
 // structure of tutor
 struct Tutor
 {
-	int tutorID;
+	int tutorID = 1;
 	string name;
 	string dateJoined;
 	string dateTerminated;
-	double hourlyPayRate;
+	double hourlyPayRate = 0.0;
 	string email;
 	string phoneNumber;
 	string address;
@@ -18,30 +23,10 @@ struct Tutor
 	string tuitionCenterName;
 	string subjectCode;
 	string subjectName;
-	double rating;
-	Tutor* nextAddress; // next pointer
-	Tutor* previousAddress; // previous pointer
+	double rating = 0;
+	Tutor* nextAddress = NULL; // next pointer
+	Tutor* previousAddress = NULL; // previous pointer
 } *head, * tail;
-
-// structure of human resource manager
-struct HumanResourceManager
-{
-	int humanResourceID;
-	string name;
-	string email;
-	string phoneNumber;
-	string password;
-};
-
-// structure of admin manager
-struct AdminManager
-{
-	int adminID;
-	string name;
-	string email;
-	string phoneNumber;
-	string password;
-};
 
 
 
@@ -63,6 +48,7 @@ void addTutorProcess(Tutor* newNode)
 		newNode->previousAddress = tail;
 		tail = newNode;
 	}
+	::sizeofLinkedList++;
 }
 
 // create newNode
@@ -94,16 +80,28 @@ void displayTutor()
 {
 	Tutor* current = head;
 
-	cout << "Tutor List:" << endl << endl;
-	cout << "Tutor ID | Name | Date Joined | Date Terminated | Hourly Pay Rate | Email | Phone Number | Address | Tuition Center Code | Tuition Center Name | Subject Code | Subject Name | Rating" << endl << endl;
+	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
 
 	while (current != NULL)
 	{
-		cout << current->tutorID << " | " << current->name << " | " << current->dateJoined << " | " << current->dateTerminated << " | " <<
-			current->hourlyPayRate << " | " << current->email << " | " << current->phoneNumber << " | " << current->address << " | " <<
-			current->tuitionCenterCode << " | " << current->tuitionCenterName << " | " << current->subjectCode << " | " <<
-			current->subjectName << " | " << current->rating << endl << endl;
-		current = current->nextAddress;
+		for (int position = 1; position <= ::sizeofLinkedList; position++)
+		{
+			cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
+			cout << "Tutor ID\t\t: " << current->tutorID << "\n" <<
+				"Name\t\t\t: " << current->name << "\n" <<
+				"Date Joined\t\t: " << current->dateJoined << "\n"
+				"Date Terminated\t\t: " << current->dateTerminated << "\n" <<
+				"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << current->hourlyPayRate << "\n" <<
+				"Email\t\t\t: " << current->email << "\n" <<
+				"Phone Number\t\t: " << current->phoneNumber << "\n" <<
+				"Address\t\t\t: " << current->address << "\n" <<
+				"Tuition Center Code\t: " << current->tuitionCenterCode << "\n" <<
+				"Tution Center Name\t: " << current->tuitionCenterName << "\n" <<
+				"Subject Code\t\t: " << current->subjectCode << "\n" <<
+				"Subject Name\t\t: " << current->subjectName << "\n" <<
+				"Rating\t\t\t: " << fixed << setprecision(1) << current->rating << endl << endl;
+			current = current->nextAddress;
+		}
 	}
 }
 
@@ -123,16 +121,18 @@ void addTutor()
 	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 17.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 4.6);
 	addTutorProcess(newNode);
 
-	// display tutor list
 	displayTutor();
 
 	// variables to read from user input
 	int userInput = 1;
 	int tutorID = 4;
 	string name;
+	int day = 1;
+	int month = 1;
+	int year = 2000;
 	string dateJoined;
 	string dateTerminated;
-	double hourlyPayRate;
+	double hourlyPayRate = 0.0;
 	string email;
 	string phoneNumber;
 	string address;
@@ -140,44 +140,138 @@ void addTutor()
 	string tuitionCenterName;
 	string subjectCode;
 	string subjectName;
-	double rating;
+	double rating = 0;
 
-	// ask user if they want to add tutor list
-	cout << "Do you want to add tutor list? 1- Yes, Others- No: ";
+	// ask user if they want to start adding tutor list
+	cout << "Enter: 1- Start Adding Tutor, Others- Exit Add Tutor: ";
 	cin >> userInput;
+	cout << endl;
 
 	if (userInput == 1)
 	{
 		while (userInput == 1)
 		{
-			cout << "Enter Name: ";
+			// name
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Name: ";
+				getline(cin, name);
+			} while (cin.fail() || !nameValidation(name));
+
+			// date joined
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Date Joined:-\nEnter Day: ";
+				cin >> day;
+				cout << "Enter Month: ";
+				cin >> month;
+				cout << "Enter Year: ";
+				cin >> year;
+
+				dateJoined = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
+			} while (cin.fail() || !dateValidation(day, month, year));
+
+			// date terminated
+			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			getline(cin, name);
-			cout << "Enter Date Joined (In DD/MM/YYYY): ";
-			getline(cin, dateJoined);
-			cout << "Enter Date Terminated (In DD/MM/YYYY). Enter 'NA' if tutor is active: ";
-			getline(cin, dateTerminated);
-			cout << "Enter Hourly Pay Rate: ";
-			cin >> hourlyPayRate;
-			cout << "Enter Email: ";
-			cin >> email;
-			cout << "Enter Phone Number: ";
-			cin >> phoneNumber;
+			cout << "Is this tutor terminated? 1- Yes, Others- No: ";
+			cin >> userInput;
+
+			do
+			{
+				if (userInput == 1)
+				{
+					cout << "Enter Date Terminated:-\nEnter Day: ";
+					cin >> day;
+					cout << "Enter Month: ";
+					cin >> month;
+					cout << "Enter Year: ";
+					cin >> year;
+
+					dateTerminated = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
+				}
+				else
+				{
+					dateTerminated = "NA";
+				}
+			} while (cin.fail() || !dateValidation(day, month, year));
+
+			// hourly pay rate
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Hourly Pay Rate: ";
+				cin >> hourlyPayRate;
+			} while (cin.fail());
+
+			// email
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Email: ";
+				cin >> email;
+			} while (cin.fail() || !emailValidation(email));
+
+			// phone number
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Phone Number: ";
+				cin >> phoneNumber;
+			} while (cin.fail() || !phoneNumberValidation(phoneNumber) || phoneNumber.length() < 10 || phoneNumber.length() > 11);
+
+			// address
+			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "Enter Address: ";
 			getline(cin, address);
-			cout << "Enter Tuition Center Code: ";
-			cin >> tuitionCenterCode;
+
+			// tuition center code
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Tuition Center Code: ";
+				cin >> tuitionCenterCode;
+			} while (cin.fail() || !tuitionCenterCodeValidation(tuitionCenterCode));
+
+			// tuition center name
+			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "Enter Tuition Center Name: ";
 			getline(cin, tuitionCenterName);
-			cout << "Enter Subject Code: ";
-			cin >> subjectCode;
+
+			// subject code
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Subject Code: ";
+				cin >> subjectCode;
+			} while (cin.fail() || !subjectCodeValidation(subjectCode));
+
+			// subject name
+			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "Enter Subject Name: ";
-			getline(cin, subjectName);
-			cout << "Enter Rating: ";
-			cin >> rating;
+			getline(cin, subjectName);;
+
+			// rating
+			do
+			{
+				cin.clear(); // remove the input operation
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Rating: ";
+				cin >> rating;
+			} while (cin.fail() || rating < 0 || rating > 5);
+
 			Tutor* newNode = createNewNode(tutorID, name, dateJoined, dateTerminated, hourlyPayRate, email,
 				phoneNumber, address, tuitionCenterCode, tuitionCenterName, subjectCode, subjectName, rating);
 
@@ -186,12 +280,12 @@ void addTutor()
 			tutorID++;
 
 			// ask user if they want to add additional tutor list
-			cout << endl << "Do you want to add more tutor list? 1-Yes, Others- No: ";
+			cout << endl << "Do you want to add additional tutor record? 1- Yes, Others- No: ";
 			cin >> userInput;
+			cout << endl;
 		}
 	}
 
-	// display tutor list
 	displayTutor();
 }
 
@@ -202,10 +296,124 @@ void updateTutorProcess();
 void updateTutor();
 
 // delete tutor list from specific location
-void deleteTutorProcess();
+void deleteTutorProcess(int position)
+{
+	// case 1: list is empty and no list to delete
+	if (head == NULL)
+	{
+		cout << "There is no tutor record to delete!" << endl << endl << endl;
+		return;
+	}
+	// case 2: first position
+	else if (position == 1)
+	{
+		Tutor* current = head; // set current to first position
+		head = head->nextAddress; // set head to next position
+
+		// if head is not empty, set the previous address of head to empty
+		if (head != NULL)
+		{
+			head->previousAddress = NULL;
+		}
+		// if head is empty, set the tail to empty as well
+		else
+		{
+			tail = NULL;
+		}
+
+		cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
+		delete current;
+		sizeofLinkedList--;
+	}
+	// case 3: last position
+	else if (position == ::sizeofLinkedList)
+	{
+		Tutor* current = tail; // set current to last position
+		tail = tail->previousAddress; // set tail to previous address
+
+		// if tail is not empty, set the next address of tail to empty
+		if (tail != NULL)
+		{
+			tail->nextAddress = NULL;
+		}
+		// if tail is empty, set the head to empty as well
+		else
+		{
+			head = NULL;
+		}
+
+		cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
+		delete current;
+		sizeofLinkedList--;
+	}
+	// case 4: middle position
+	else
+	{
+		Tutor* current = head->nextAddress; // set current to next position
+		int currentPosition = 2; // set position to 2 = in the middle position
+
+		while (current != NULL)
+		{
+			if (currentPosition == position)
+			{
+				// set current previous address's next address to current next address
+				current->previousAddress->nextAddress = current->nextAddress;
+				// set current next address's previous address to current previous address
+				current->nextAddress->previousAddress = current->previousAddress;
+
+				cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
+				delete current;
+				sizeofLinkedList--;
+				return;
+			}
+
+			current = current->nextAddress;
+			currentPosition++;
+		}
+
+		// if the program cannot find any position entered by user
+		cout << "Failed to find the position from the tutor record! Please try again!" << endl << endl << endl;
+	}
+}
 
 // delete tutor for main function
-void deleteTutor();
+void deleteTutor()
+{
+	int userInput = 1;
+
+	displayTutor();
+
+	// ask user if they want to start deleting tutor list
+	cout << "Enter: 1- Start Deleting Tutor, Others- Exit Delete Tutor: ";
+	cin >> userInput;
+	cout << endl;
+
+	while (userInput == 1)
+	{
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter the position of tutor record that you want to delete: ";
+			cin >> userInput;
+			cout << endl;
+		} while (cin.fail() || userInput < 1 || userInput > ::sizeofLinkedList);
+
+		deleteTutorProcess(userInput);
+		displayTutor();
+
+		// if head is empty, display error message and stop delete process
+		if (head == NULL)
+		{
+			break;
+		}
+
+		// ask user if they want to delete additional tutor list
+		cout << "Do you want to delete additional tutor record? 1- Yes, Others- No: ";
+		cin >> userInput;
+		cout << endl;
+	}
+}
 
 // login
 int login() {
@@ -271,6 +479,11 @@ int login() {
 int main()
 {
 	// program menu should be here, when a user select an option, it will execute specific function
+	// can use switch case
+
+	addTutor();
+	deleteTutor();
+  
 	int status = login();
 	// show HR or admin menu
 	if (status == 101)
@@ -283,6 +496,7 @@ int main()
 		cout << "Show Admin menu and loop this menu" << endl;
 		addTutor();
 	}
+
 
 
 	return 0;
