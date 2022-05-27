@@ -415,6 +415,63 @@ void deleteTutor()
 	}
 }
 
+// login
+int login() {
+
+	//variables to authenticate and determine user type
+	int userType;
+	int userInput = 1;
+	int status = 0;
+	string username, password;
+
+	if (userInput == 1)
+	{
+		while (userInput == 1) 
+		{
+			// ask user to select user type and enter username and password
+			cout << "Please Select User type: " << endl << "1-HR, Others-Admin: ";
+			cin >> userType;
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+			cout << "Enter Username: ";
+			getline(cin, username);
+			cout << "Enter Password: ";
+			getline(cin, password);
+
+			// check user type and validate username and password
+			if (userType == 1)
+			{
+				if (username == "hr" && password == "123") {
+					cout << "Welcome HR " << endl << endl;
+					//set the status to success (HR menu) & stop this loop
+					status = 101;
+					userInput = 2;
+				}
+			}
+			else
+			{
+				if (username == "admin" && password == "123") {
+					cout << "Welcome Admin" << endl << endl;
+					//set the status to success (Admin menu) & stop this loop
+					status = 102;
+					userInput = 2;
+				}
+			}
+			// incorrect credentials ask user do they want to retry
+			if (status == 0)
+			{
+				cout << endl << "Incorrrect username and/or password. 1-Try Again, Others- No (Exit): ";
+				cin >> userInput;
+			}
+		}
+	}
+
+	//return this value to determine what menu to show the user in main()
+	return status;
+}
+
+
+
 
 
 
@@ -426,6 +483,21 @@ int main()
 
 	addTutor();
 	deleteTutor();
+  
+	int status = login();
+	// show HR or admin menu
+	if (status == 101)
+	{
+		cout << "Show HR menu and loop this menu" << endl;
+		addTutor();
+	}
+	else if(status == 102)
+	{
+		cout << "Show Admin menu and loop this menu" << endl;
+		addTutor();
+	}
+
+
 
 	return 0;
 }
