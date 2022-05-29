@@ -577,7 +577,7 @@ Tutor* mergeSort(Tutor* head, int sortField)
 
 
 //		linear serach code
-bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating)
+bool linearSearch(Tutor* head)
 {
 	// Stores head Node
 	Tutor* temp = head;
@@ -588,20 +588,26 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 	// if search term exist
 	bool found = false;
 
+
+	// todo complete this add the loop and error thing when input is incorrect
+// linearSearch(head, int searchType, int SearchId, double searchRating)
+	int searchType = 0;
+	int searchId = 0;
+	double searchRating = 0;
+
+	// ask user to select field to search from
+	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
+	cin >> searchType;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 	if (searchType == 1)
 	{
+		cout << "Please enter Id: ";
+		cin >> searchId;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 		// go throgh the linked list (for id)
 		while (temp->tutorID != searchId && temp->nextAddress != NULL) {
-
-			// print print out the index
-			if (temp->rating == searchId) {
-
-				// todo add printing the details
-				cout << "Found id at :" << position + 1 << endl;
-
-				//item found
-				found = true;
-			}
 
 			// Update position
 			position++;
@@ -609,10 +615,24 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 			// Update temp data
 			temp = temp->nextAddress;
 		}
+		// print print out the index
+		if (temp->tutorID == searchId) {
+
+			// todo add printing the details
+			cout << "Found id at :" << position + 1 << endl;
+
+			//item found
+			found = true;
+		}
 
 	}
+
 	else if (searchType == 2)
 	{
+		cout << "Please enter rating: ";
+		cin >> searchRating;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
 		// go throgh the whole linked list (for rating)
 		while (temp->nextAddress != NULL) {
 
@@ -620,7 +640,7 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 			if (temp->rating == searchRating) {
 
 				// todo add printing the details
-				cout << "Found rating at :" << position + 1 << endl;
+				cout << "Found at :" << position + 1 << endl;
 
 				//item found
 				found = true;
@@ -633,6 +653,12 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 			temp = temp->nextAddress;
 
 		}
+
+	}
+	else
+	{
+		cout << "Invalid input ";
+
 	}
 
 
@@ -650,7 +676,15 @@ int main()
 	addTutor();
 	deleteTutor();
 
-	// todo menu for sort add the loop and error thing here
+	// searching
+	if (linearSearch(head) == false)
+	{
+		cout << "Cannot find data ";
+	} 
+
+
+
+	// todo menu for sort add the loop and error thing here the invalid input
 	int sortField = 0;
 	// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
 	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
@@ -659,36 +693,7 @@ int main()
 	mergeSort(head, sortField);
 	displayTutor();
 
-	// todo complete this add the loop and error thing when input is incorrect
-	// linearSearch(head, int searchType, int SearchId, double searchRating)
-	int searchType = 0;
-	int searchId = 0;
-	double searchRating = 0;
 
-	// ask user to select field to search from
-	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
-	cin >> searchType;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	if (searchType == 1)
-	{
-		cout << "Please enter Id: ";
-		cin >> searchId;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		linearSearch(head, searchType, searchId, 0);
-
-	}
-	else if (searchType == 2)
-	{
-		cout << "Please enter rating: ";
-		cin >> searchRating;
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		linearSearch(head, searchType, 0, searchRating);
-	}
-	else
-	{
-		cout << "Invalid input ";
-
-	}
 
 
 
