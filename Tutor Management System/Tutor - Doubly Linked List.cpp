@@ -485,7 +485,7 @@ Tutor* split(Tutor* head)
 	return temp;
 }
 // function to merge the splitted linked list
-Tutor* merge(Tutor* first, Tutor* second)
+Tutor* merge(Tutor* first, Tutor* second, int sortField)
 {
 	// check if 1st linked list is empty if yes then return the 2nd
 	if (!first) {
@@ -497,13 +497,6 @@ Tutor* merge(Tutor* first, Tutor* second)
 	}
 
 	//variables to authenticate and determine user type
-	int sortField = 0;
-
-	// ask user to select field to sort with
-	cin.clear();
-	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
-	cin >> sortField;
-	//cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 	if (sortField == 1)
 	{
@@ -511,14 +504,14 @@ Tutor* merge(Tutor* first, Tutor* second)
 		// pick the smaller value and put to left hand side
 		if (first->tutorID < second->tutorID)
 		{
-			first->nextAddress = merge(first->nextAddress, second);
+			first->nextAddress = merge(first->nextAddress, second, sortField);
 			first->nextAddress->previousAddress = first;
 			first->previousAddress = NULL;
 			return first;
 		}
 		else
 		{
-			second->nextAddress = merge(first, second->nextAddress);
+			second->nextAddress = merge(first, second->nextAddress, sortField);
 			second->nextAddress->previousAddress = second;
 			second->previousAddress = NULL;
 			return second;
@@ -530,14 +523,14 @@ Tutor* merge(Tutor* first, Tutor* second)
 		// pick the smaller value and put to left hand side
 		if (first->hourlyPayRate < second->hourlyPayRate)
 		{
-			first->nextAddress = merge(first->nextAddress, second);
+			first->nextAddress = merge(first->nextAddress, second, sortField);
 			first->nextAddress->previousAddress = first;
 			first->previousAddress = NULL;
 			return first;
 		}
 		else
 		{
-			second->nextAddress = merge(first, second->nextAddress);
+			second->nextAddress = merge(first, second->nextAddress, sortField);
 			second->nextAddress->previousAddress = second;
 			second->previousAddress = NULL;
 			return second;
@@ -549,14 +542,14 @@ Tutor* merge(Tutor* first, Tutor* second)
 		// pick the smaller value and put to left hand side
 		if (first->rating < second->rating)
 		{
-			first->nextAddress = merge(first->nextAddress, second);
+			first->nextAddress = merge(first->nextAddress, second, sortField);
 			first->nextAddress->previousAddress = first;
 			first->previousAddress = NULL;
 			return first;
 		}
 		else
 		{
-			second->nextAddress = merge(first, second->nextAddress);
+			second->nextAddress = merge(first, second->nextAddress, sortField);
 			second->nextAddress->previousAddress = second;
 			second->previousAddress = NULL;
 			return second;
@@ -572,17 +565,17 @@ Tutor* merge(Tutor* first, Tutor* second)
 }
 
 // merge sort function 
-Tutor* mergeSort(Tutor* head)
+Tutor* mergeSort(Tutor* head, int sortField)
 {
 	if (!head || !head->nextAddress)
 		return head;
 	Tutor* second = split(head);
 	//do merge sort recursively for left half and right half
-	head = mergeSort(head);
-	second = mergeSort(second);
+	head = mergeSort(head, sortField);
+	second = mergeSort(second, sortField);
 
 	// merge the left and right sorted linked list
-	return merge(head, second);
+	return merge(head, second, sortField);
 }
 
 
@@ -600,13 +593,22 @@ int main()
 
 	addTutor();
 	deleteTutor();
-  
+
+	int sortField = 0;
+	// ask user to select field to sort with
+	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
+	cin >> sortField;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	mergeSort(head, sortField);
+	displayTutor();
+
+
 	int status = login();
 	// show HR or admin menu
 	if (status == 101)
 	{
 		cout << "Show HR menu and loop this menu" << endl;
-		mergeSort(head);
+		mergeSort(head, sortField);
 		displayTutor();
 	}
 	else if(status == 102)
