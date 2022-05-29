@@ -593,16 +593,23 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 		// go throgh the linked list (for id)
 		while (temp->tutorID != searchId && temp->nextAddress != NULL) {
 
+			// print print out the index
+			if (temp->rating == searchId) {
+
+				// todo add printing the details
+				cout << "Found id at :" << position + 1 << endl;
+
+				//item found
+				found = true;
+			}
+
 			// Update position
 			position++;
 
 			// Update temp data
 			temp = temp->nextAddress;
 		}
-		if (temp->tutorID != searchId) {
-			found = false;
 
-		}
 	}
 	else if (searchType == 2)
 	{
@@ -613,7 +620,7 @@ bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating
 			if (temp->rating == searchRating) {
 
 				// todo add printing the details
-				cout << "Found at :" << position + 1 << endl;
+				cout << "Found rating at :" << position + 1 << endl;
 
 				//item found
 				found = true;
