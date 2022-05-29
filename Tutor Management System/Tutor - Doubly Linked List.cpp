@@ -470,7 +470,7 @@ int login() {
 	return status;
 }
 
-// merge sort code for linked list
+//		merge sort code for linked list
 // split the double linked list into half
 Tutor* split(Tutor* head)
 {
@@ -555,11 +555,7 @@ Tutor* merge(Tutor* first, Tutor* second, int sortField)
 			return second;
 		}
 	}
-	else
-	{
-		cout << "Invalid input " << endl;
 
-	}
 
 
 }
@@ -577,13 +573,66 @@ Tutor* mergeSort(Tutor* head, int sortField)
 	// merge the left and right sorted linked list
 	return merge(head, second, sortField);
 }
+//		merge sort code for linked list end here
 
 
+//		linear serach code
+bool linearSearch(Tutor* head, int searchType, int searchId, double searchRating)
+{
+	// Stores head Node
+	Tutor* temp = head;
+
+	// store position 
+	int position = 0;
+
+	// if search term exist
+	bool found = false;
+
+	if (searchType == 1)
+	{
+		// go throgh the linked list (for id)
+		while (temp->tutorID != searchId && temp->nextAddress != NULL) {
+
+			// Update position
+			position++;
+
+			// Update temp data
+			temp = temp->nextAddress;
+		}
+		if (temp->tutorID != searchId) {
+			found = false;
+
+		}
+	}
+	else if (searchType == 2)
+	{
+		// go throgh the whole linked list (for rating)
+		while (temp->nextAddress != NULL) {
+
+			// print print out the index
+			if (temp->rating == searchRating) {
+
+				// todo add printing the details
+				cout << "Found at :" << position + 1 << endl;
+
+				//item found
+				found = true;
+			}
+
+			// Update position
+			position++;
+
+			// Update temp data
+			temp = temp->nextAddress;
+
+		}
+	}
 
 
-
-//merge sort code for linked list end here
-
+	// return T = found element, F = element not found
+	return found;
+}
+//		linear search code end here
 
 // main function
 int main()
@@ -594,13 +643,46 @@ int main()
 	addTutor();
 	deleteTutor();
 
+	// todo menu for sort add the loop and error thing here
 	int sortField = 0;
-	// ask user to select field to sort with
+	// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
 	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
 	cin >> sortField;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	mergeSort(head, sortField);
 	displayTutor();
+
+	// todo complete this add the loop and error thing when input is incorrect
+	// linearSearch(head, int searchType, int SearchId, double searchRating)
+	int searchType = 0;
+	int searchId = 0;
+	double searchRating = 0;
+
+	// ask user to select field to search from
+	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
+	cin >> searchType;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	if (searchType == 1)
+	{
+		cout << "Please enter Id: ";
+		cin >> searchId;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		linearSearch(head, searchType, searchId, 0);
+
+	}
+	else if (searchType == 2)
+	{
+		cout << "Please enter rating: ";
+		cin >> searchRating;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		linearSearch(head, searchType, 0, searchRating);
+	}
+	else
+	{
+		cout << "Invalid input ";
+
+	}
+
 
 
 	int status = login();
