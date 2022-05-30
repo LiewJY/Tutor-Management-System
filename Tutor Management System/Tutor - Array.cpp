@@ -6,20 +6,26 @@
 
 using namespace std;
 string TutorArray[100][13] = { { "1", "John", "20/1/2018", "30/6/2019", "15.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "4.5"},
-	{"22", "May", "6/3/2018", "NA", "18.00", "may@gmail.com", "0184628592", "6, Jalan Cheras, Taman Cheras, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "4.8"},
+	{"2", "May", "6/3/2018", "NA", "18.00", "may@gmail.com", "0184628592", "6, Jalan Cheras, Taman Cheras, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "4.8"},
 	{"3", "Brian", "3/8/2019", "NA", "17.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4.6"}
 
 };
 
-void displayTutor() {
-
+int getRow()
+{
 	//calculate size
 	int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
+	int row = 0;
+	while (row < arraySize && TutorArray[row][0] != "") { row++; }
+	return row;
+}
+
+void displayTutor() {
 
 	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
 
 	int row = 0;
-	while (row < arraySize && TutorArray[row][0] != "")
+	while (row < getRow())
 	{
 		cout << string(40, '-') << " [" << "Position: " << row + 1 << "] " << string(40, '-') << endl;
 		cout << "Tutor ID\t\t: " << stoi(TutorArray[row][0]) << "\n" <<
@@ -198,13 +204,8 @@ void addTutor() {
 
 			// add to array
 
-			//calculate size
-			int row = 0;
-			int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
-			while (row < arraySize && TutorArray[row][0] != "")
-			{
-				row++;
-			}
+			//get row size
+			int row = getRow();
 
 			TutorArray[row][0] = to_string(tutorID);
 			TutorArray[row][1] = name;
@@ -369,18 +370,90 @@ void quickSort(string  TutorArray[][13], int start, int end, int sortField)
 
 
 //		linear search code
+bool linearSearch()
+{
+	// store position 
+	int position = 0;
+	// if search term exist
+	bool found = false;
+
+	// todo complete this add the loop and error thing when input is incorrect
+	int searchType = 0;
+	int searchId = 0;
+	double searchRating = 0;
+
+	// ask user to select field to search from
+	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
+	cin >> searchType;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 
+	if (searchType == 1)
+	{
+		cout << "Please enter Id: ";
+		cin >> searchId;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+		//go throgh the array (for id)
+		while (stoi(TutorArray[position][0]) != searchId && position < getRow()) {
+			// Update position
+			position++;
+		}
+		// print print out the index
+		if (stoi(TutorArray[position][0]) == searchId) {
+
+			// todo add printing the details
+			cout << "Found id at :" << position + 1 << endl;
+
+			//item found
+			found = true;
+		}
+	}
+
+	else if (searchType == 2)
+	{
+		cout << "Please enter rating: ";
+		cin >> searchRating;
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+		// go throgh the whole array (for rating)
+		while (position < getRow()) {
+
+			// print print out the index
+			if (stod(TutorArray[position][2]) == searchRating) {
+
+				// todo add printing the details
+				cout << "Found at :" << position + 1 << endl;
+
+				//item found
+				found = true;
+			}
+			// Update position
+			position++;
+		}
+
+	}
+	else
+	{
+		cout << "Invalid input ";
+
+	}
+
+
+	// return T = found element, F = element not found
+	return found;
+}
 //		linear search code end here
 
 
 int main() {
 	addTutor();
 
-	//calculate size
-	int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
-	int row = 0;
-	while (row < arraySize && TutorArray[row][0] != ""){row++;}
+	// searching
+	cout << linearSearch() << endl;
+	//will show T or F success or F
+
+
 
 	// todo menu for sort add the loop and error thing here the invalid input
 	int sortField = 0;
@@ -389,7 +462,7 @@ int main() {
 	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
 	cin >> sortField;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	quickSort(TutorArray, 0, row - 1, sortField);
+	quickSort(TutorArray, 0, getRow() - 1, sortField);
 
 
 
