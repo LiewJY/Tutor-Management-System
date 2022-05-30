@@ -496,8 +496,6 @@ Tutor* merge(Tutor* first, Tutor* second, int sortField)
 		return first;
 	}
 
-	//variables to authenticate and determine user type
-
 	if (sortField == 1)
 	{
 		//tutor Id

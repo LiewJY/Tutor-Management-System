@@ -6,7 +6,7 @@
 
 using namespace std;
 string TutorArray[100][13] = { { "1", "John", "20/1/2018", "30/6/2019", "15.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "4.5"},
-	{"2", "May", "6/3/2018", "NA", "18.00", "may@gmail.com", "0184628592", "6, Jalan Cheras, Taman Cheras, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "4.8"},
+	{"22", "May", "6/3/2018", "NA", "18.00", "may@gmail.com", "0184628592", "6, Jalan Cheras, Taman Cheras, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "4.8"},
 	{"3", "Brian", "3/8/2019", "NA", "17.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4.6"}
 
 };
@@ -236,11 +236,166 @@ void addTutor() {
 void editTutor();
 void deleteTutor();
 
+//		quick sort code
+int partition(string TutorArray[][13], int start, int end, int sortField)
+{
 
+	if (sortField == 1) 
+	{
+		//tutor Id
+		int pivot = stoi(TutorArray[start][0]);
+
+		int count = 0;
+		for (int i = start + 1; i <= end; i++) {
+			if (stoi(TutorArray[i][0]) <= pivot)
+				count++;
+		}
+
+		// Giving pivot element  correct position
+		int pivotIndex = start + count;
+		swap(TutorArray[pivotIndex], TutorArray[start]);
+
+		// Sorting left and right pivot elements
+		int i = start, j = end;
+
+		while (i < pivotIndex && j > pivotIndex) {
+
+			while (stoi(TutorArray[i][0]) <= pivot) {
+				i++;
+			}
+
+			while (stoi(TutorArray[j][0]) > pivot) {
+				j--;
+			}
+
+			if (i < pivotIndex && j > pivotIndex) {
+				swap(TutorArray[i++], TutorArray[j--]);
+			}
+		}
+		return pivotIndex;
+
+
+	}
+	else if (sortField == 2)
+	{
+		//hourly pay rate
+		double pivot = stod(TutorArray[start][4]);
+
+		int count = 0;
+		for (int i = start + 1; i <= end; i++) {
+			if (stod(TutorArray[i][4]) <= pivot)
+				count++;
+		}
+
+		// Giving pivot element its correct position
+		int pivotIndex = start + count;
+		swap(TutorArray[pivotIndex], TutorArray[start]);
+
+		// Sorting left and right parts of the pivot element
+		int i = start, j = end;
+
+		while (i < pivotIndex && j > pivotIndex) {
+
+			while (stod(TutorArray[i][4]) <= pivot) {
+				i++;
+			}
+
+			while (stod(TutorArray[j][4]) > pivot) {
+				j--;
+			}
+
+			if (i < pivotIndex && j > pivotIndex) {
+				swap(TutorArray[i++], TutorArray[j--]);
+			}
+		}
+
+		return pivotIndex;
+
+	}
+	else if (sortField == 3)
+	{
+		//rating
+		double pivot = stod(TutorArray[start][12]);
+
+		int count = 0;
+		for (int i = start + 1; i <= end; i++) {
+			if (stod(TutorArray[i][12]) <= pivot)
+				count++;
+		}
+
+		// Giving pivot element its correct position
+		int pivotIndex = start + count;
+		swap(TutorArray[pivotIndex], TutorArray[start]);
+
+		// Sorting left and right parts of the pivot element
+		int i = start, j = end;
+
+		while (i < pivotIndex && j > pivotIndex) {
+
+			while (stod(TutorArray[i][12]) <= pivot) {
+				i++;
+			}
+
+			while (stod(TutorArray[j][12]) > pivot) {
+				j--;
+			}
+
+			if (i < pivotIndex && j > pivotIndex) {
+				swap(TutorArray[i++], TutorArray[j--]);
+			}
+		}
+
+		return pivotIndex;
+
+	}
+}
+void quickSort(string  TutorArray[][13], int start, int end, int sortField)
+{
+
+	// base case
+	if (start >= end)
+		return;
+
+	// partitioning the array
+	int p = partition(TutorArray, start, end, sortField);
+
+	// Sorting the left part
+	quickSort(TutorArray, start, p - 1,  sortField);
+
+	// Sorting the right part
+	quickSort(TutorArray, p + 1, end, sortField);
+}
+//		quick sort code end here
+
+
+//		linear search code
+
+
+//		linear search code end here
 
 
 int main() {
 	addTutor();
+
+	//calculate size
+	int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
+	int row = 0;
+	while (row < arraySize && TutorArray[row][0] != ""){row++;}
+
+	// todo menu for sort add the loop and error thing here the invalid input
+	int sortField = 0;
+	// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
+	cout << "sort" << endl;
+	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
+	cin >> sortField;
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	quickSort(TutorArray, 0, row - 1, sortField);
+
+
+
+
+	displayTutor();
+
 
 	return 0;
 }
