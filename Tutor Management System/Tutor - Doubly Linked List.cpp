@@ -993,6 +993,9 @@ int main()
 						head = head->previousAddress;
 
 					displayTutor();
+
+					mergeSort(head, 1);
+
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			case 5:
@@ -1076,7 +1079,14 @@ int main()
 					}
 
 					mergeSort(head, sortField);
+
+					while (head->previousAddress != NULL)
+						head = head->previousAddress;
+
 					displayTutor();
+
+					mergeSort(head, 1);
+
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			case 0:
