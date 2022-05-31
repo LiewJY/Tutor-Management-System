@@ -98,6 +98,8 @@ void displayDetails(int position, Tutor* current)
 // display tutor list for process function and main function
 void displayTutor()
 {
+	//while (head->previousAddress != NULL)
+	//	head = head->previousAddress;
 	Tutor* current = head;
 
 	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
@@ -106,7 +108,7 @@ void displayTutor()
 	{
 		for (int position = 1; position <= ::sizeofLinkedList; position++)
 		{
-			displayDetails(12, current);
+			displayDetails(position, current);
 			current = current->nextAddress;
 		}
 	}
@@ -120,13 +122,13 @@ void predefinedTutorList()
 	// empty the list
 	head = tail = NULL;
 
-	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 2);
+	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 3);
 	addTutorProcess(newNode);
 
-	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 5);
+	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 2);
 	addTutorProcess(newNode);
 
-	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 2);
+	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 1);
 	addTutorProcess(newNode);
 }
 
@@ -787,6 +789,7 @@ Tutor* merge(Tutor* first, Tutor* second, int sortField)
 			return second;
 		}
 	}
+	
 }
 
 // merge sort function 
@@ -985,6 +988,10 @@ int main()
 					}
 
 					mergeSort(head, sortField);
+
+					while (head->previousAddress != NULL)
+						head = head->previousAddress;
+
 					displayTutor();
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
