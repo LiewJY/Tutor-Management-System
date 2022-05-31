@@ -1,30 +1,42 @@
 #include <iostream>
-
 #include <string>
+#include <regex>
 #include <iomanip>
 #include "Validation.h"
 
 using namespace std;
-string TutorArray[100][13] = { { "1", "John", "20/1/2018", "30/6/2019", "15.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "4.5"},
-	{"2", "May", "6/3/2018", "NA", "18.00", "may@gmail.com", "0184628592", "6, Jalan Cheras, Taman Cheras, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "4.8"},
-	{"3", "Brian", "3/8/2019", "NA", "17.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4.6"}
 
+// predefined tutor list
+string TutorArray[100][13] = {
+	{"1", "John", "20/1/2018", "30/6/2019", "62.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "3"},
+	{"2", "May", "6/3/2018", "NA", "75.00", "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "5"},
+	{"3", "Brian", "3/8/2019", "NA", "68.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4"}
 };
 
+// get data row
 int getRow()
 {
 	//calculate size
 	int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
 	int row = 0;
-	while (row < arraySize && TutorArray[row][0] != "") { row++; }
+
+	while (row < arraySize && TutorArray[row][0] != "")
+	{
+		row++;
+	}
+
 	return row;
 }
 
-void displayTutor() {
+
+// DISPLAY
+// display tutor for main function
+void displayTutor()
+{
+	int row = 0;
 
 	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
 
-	int row = 0;
 	while (row < getRow())
 	{
 		cout << string(40, '-') << " [" << "Position: " << row + 1 << "] " << string(40, '-') << endl;
@@ -40,7 +52,7 @@ void displayTutor() {
 			"Tution Center Name\t: " << TutorArray[row][9] << "\n" <<
 			"Subject Code\t\t: " << TutorArray[row][10] << "\n" <<
 			"Subject Name\t\t: " << TutorArray[row][11] << "\n" <<
-			"Rating\t\t\t: " << fixed << setprecision(1) << stod(TutorArray[row][12]) << endl << endl;
+			"Rating\t\t\t: " << stoi(TutorArray[row][12]) << endl << endl;
 		cout << endl;
 
 		row++;
@@ -48,8 +60,10 @@ void displayTutor() {
 }
 
 
-void addTutor() {
-
+// ADD
+// add tutor for main function
+void addTutor()
+{
 	// variables to read from user input
 	int userInput = 1;
 	int tutorID = 4;
@@ -67,180 +81,236 @@ void addTutor() {
 	string tuitionCenterName;
 	string subjectCode;
 	string subjectName;
-	double rating = 0;
-
+	int rating = 0;
 
 	displayTutor();
 
-	// ask user if they want to start adding tutor list
-	cout << "Enter: 1- Start Adding Tutor, Others- Exit Add Tutor: ";
-	cin >> userInput;
-	cout << endl;
-
-	if (userInput == 1)
+	while (userInput == 1)
 	{
-		while (userInput == 1)
+		// name
+		do
 		{
-			// name
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Name: ";
-				getline(cin, name);
-			} while (cin.fail() || !nameValidation(name));
-
-			// date joined
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Date Joined:-\nEnter Day: ";
-				cin >> day;
-				cout << "Enter Month: ";
-				cin >> month;
-				cout << "Enter Year: ";
-				cin >> year;
-
-				dateJoined = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
-			} while (cin.fail() || !dateValidation(day, month, year));
-
-			// date terminated
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Is this tutor terminated? 1- Yes, Others- No: ";
-			cin >> userInput;
+			cout << "Enter Name: ";
+			getline(cin, name);
 
-			do
+			if (cin.fail() || !nameValidation(name))
 			{
-				if (userInput == 1)
-				{
-					cout << "Enter Date Terminated:-\nEnter Day: ";
-					cin >> day;
-					cout << "Enter Month: ";
-					cin >> month;
-					cout << "Enter Year: ";
-					cin >> year;
+				cout << "Invalid name! Please enter a valid name!" << endl;
+			}
+		} while (cin.fail() || !nameValidation(name));
 
-					dateTerminated = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
-				}
-				else
-				{
-					dateTerminated = "NA";
-				}
-			} while (cin.fail() || !dateValidation(day, month, year));
-
-			// hourly pay rate
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Hourly Pay Rate: ";
-				cin >> hourlyPayRate;
-			} while (cin.fail());
-
-			// email
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Email: ";
-				cin >> email;
-			} while (cin.fail() || !emailValidation(email));
-
-			// phone number
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Phone Number: ";
-				cin >> phoneNumber;
-			} while (cin.fail() || !phoneNumberValidation(phoneNumber) || phoneNumber.length() < 10 || phoneNumber.length() > 11);
-
-			// address
+		// date joined
+		do
+		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Enter Address: ";
-			getline(cin, address);
+			cout << "Enter Date Joined:-\nEnter Day (22): ";
+			cin >> day;
+			cout << "Enter Month (2): ";
+			cin >> month;
+			cout << "Enter Year (2022): ";
+			cin >> year;
+			cout << endl;
 
-			// tuition center code
-			do
+			dateJoined = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
+
+			if (cin.fail() || !dateValidation(day, month, year))
 			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Tuition Center Code: ";
-				cin >> tuitionCenterCode;
-			} while (cin.fail() || !tuitionCenterCodeValidation(tuitionCenterCode));
+				cout << endl << "Invalid date! Please enter a valid date!" << endl;
+			}
+		} while (cin.fail() || !dateValidation(day, month, year));
 
-			// tuition center name
+		// date terminated
+		do
+		{
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Enter Tuition Center Name: ";
-			getline(cin, tuitionCenterName);
-
-			// subject code
-			do
-			{
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Subject Code: ";
-				cin >> subjectCode;
-			} while (cin.fail() || !subjectCodeValidation(subjectCode));
-
-			// subject name
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			cout << "Enter Subject Name: ";
-			getline(cin, subjectName);;
-
-			// rating
-			do
-			{
-				cin.clear(); // remove the input operation
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
-				cout << "Enter Rating: ";
-				cin >> rating;
-			} while (cin.fail() || rating < 0 || rating > 5);
-
-			// add to array
-
-			//get row size
-			int row = getRow();
-
-			TutorArray[row][0] = to_string(tutorID);
-			TutorArray[row][1] = name;
-			TutorArray[row][2] = dateJoined;
-			TutorArray[row][3] = dateTerminated;
-			TutorArray[row][4] = to_string(hourlyPayRate);
-			TutorArray[row][5] = email;
-			TutorArray[row][6] = phoneNumber;
-			TutorArray[row][7] = address;
-			TutorArray[row][8] = tuitionCenterCode;
-			TutorArray[row][9] = tuitionCenterName;
-			TutorArray[row][10] = subjectCode;
-			TutorArray[row][11] = subjectName;
-			TutorArray[row][12] = to_string(rating);
-
-
-			tutorID++;
-
-			// ask user if they want to add additional tutor list
-			cout << endl << "Do you want to add additional tutor record? 1- Yes, Others- No: ";
+			cout << "Is this tutor terminated?" << endl;
+			cout << "(1) Yes // (0) No" << endl << endl;
+			cout << "Please enter an option: ";
 			cin >> userInput;
 			cout << endl;
-		}
+
+			if (cin.fail() || (userInput != 1 && userInput != 0))
+			{
+				cout << "Invalid option! Please enter a valid option!" << endl << endl;
+			}
+		} while (cin.fail() || (userInput != 1 && userInput != 0));
+
+		do
+		{
+			if (userInput == 1)
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter Date Terminated:-\nEnter Day (22): ";
+				cin >> day;
+				cout << "Enter Month (2): ";
+				cin >> month;
+				cout << "Enter Year (2022): ";
+				cin >> year;
+				cout << endl;
+
+				dateTerminated = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
+
+				if (cin.fail() || !dateValidation(day, month, year))
+				{
+					cout << endl << "Invalid date! Please enter a valid date!" << endl;
+				}
+			}
+			else
+			{
+				dateTerminated = "NA";
+			}
+		} while (cin.fail() || !dateValidation(day, month, year));
+
+		// hourly pay rate
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Hourly Pay Rate (RM 40 - RM 80): RM ";
+			cin >> hourlyPayRate;
+			cout << endl;
+
+			if (cin.fail() || hourlyPayRate < 40.00 || hourlyPayRate > 80.00)
+			{
+				cout << "Invalid hourly pay rate! Please enter a valid hourly pay rate between RM 40 to RM 80!" << endl;
+			}
+		} while (cin.fail() || hourlyPayRate < 40.00 || hourlyPayRate > 80.00);
+
+		// email
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Email: ";
+			cin >> email;
+			cout << endl;
+
+			if (cin.fail() || !emailValidation(email))
+			{
+				cout << "Invalid email! Please enter a valid email!" << endl;
+			}
+		} while (cin.fail() || !emailValidation(email));
+
+		// phone number
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Phone Number: ";
+			cin >> phoneNumber;
+			cout << endl;
+
+			if (cin.fail() || !phoneNumberValidation(phoneNumber) || phoneNumber.length() < 10 || phoneNumber.length() > 11)
+			{
+				cout << "Invalid phone number! Please enter a valid phone number in 10 or 11 numbers!" << endl;
+			}
+		} while (cin.fail() || !phoneNumberValidation(phoneNumber) || phoneNumber.length() < 10 || phoneNumber.length() > 11);
+
+		// address
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Enter Address: ";
+		getline(cin, address);
+
+		// tuition center code
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Tuition Center Code (XXXX1234): ";
+			cin >> tuitionCenterCode;
+			cout << endl;
+
+			if (cin.fail() || !tuitionCenterCodeValidation(tuitionCenterCode))
+			{
+				cout << "Invalid tuition center code! Please enter a valid tuition center code!" << endl;
+			}
+		} while (cin.fail() || !tuitionCenterCodeValidation(tuitionCenterCode));
+
+		// tuition center name
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Enter Tuition Center Name: ";
+		getline(cin, tuitionCenterName);
+
+		// subject code
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Subject Code (XXXX1234): ";
+			cin >> subjectCode;
+			cout << endl;
+
+			if (cin.fail() || !subjectCodeValidation(subjectCode))
+			{
+				cout << "Invalid subject code! Please enter a valid subject code!" << endl;
+			}
+		} while (cin.fail() || !subjectCodeValidation(subjectCode));
+
+		// subject name
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Enter Subject Name: ";
+		getline(cin, subjectName);
+
+		// rating
+		do
+		{
+			cin.clear(); // remove the input operation
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter Rating (1 - 5): ";
+			cin >> rating;
+			cout << endl;
+
+			if (cin.fail() || rating < 1 || rating > 5)
+			{
+				cout << "Invalid rating! Please enter a valid rating between 1 to 5!" << endl;
+			}
+		} while (cin.fail() || rating < 1 || rating > 5);
+
+		//get row size
+		int row = getRow();
+
+		TutorArray[row][0] = to_string(tutorID);
+		TutorArray[row][1] = name;
+		TutorArray[row][2] = dateJoined;
+		TutorArray[row][3] = dateTerminated;
+		TutorArray[row][4] = to_string(hourlyPayRate);
+		TutorArray[row][5] = email;
+		TutorArray[row][6] = phoneNumber;
+		TutorArray[row][7] = address;
+		TutorArray[row][8] = tuitionCenterCode;
+		TutorArray[row][9] = tuitionCenterName;
+		TutorArray[row][10] = subjectCode;
+		TutorArray[row][11] = subjectName;
+		TutorArray[row][12] = to_string(rating);
+
+		tutorID++;
+
+		// ask user if they want to add additional tutor list
+		cout << endl << "Do you want to add additional tutor record? 1- Yes, Others- No: ";
+		cin >> userInput;
+		cout << endl;
 	}
 
 	displayTutor();
 }
 
+
 void editTutor();
 void deleteTutor();
 
-//		quick sort code
+
+// SORT
+// quick sort code
 int partition(string TutorArray[][13], int start, int end, int sortField)
 {
-
 	if (sortField == 1) 
 	{
 		//tutor Id
@@ -252,11 +322,11 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 				count++;
 		}
 
-		// Giving pivot element  correct position
+		// giving pivot element correct position
 		int pivotIndex = start + count;
 		swap(TutorArray[pivotIndex], TutorArray[start]);
 
-		// Sorting left and right pivot elements
+		// sorting left and right pivot elements
 		int i = start, j = end;
 
 		while (i < pivotIndex && j > pivotIndex) {
@@ -273,9 +343,8 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 				swap(TutorArray[i++], TutorArray[j--]);
 			}
 		}
+
 		return pivotIndex;
-
-
 	}
 	else if (sortField == 2)
 	{
@@ -311,7 +380,6 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 		}
 
 		return pivotIndex;
-
 	}
 	else if (sortField == 3)
 	{
@@ -347,9 +415,9 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 		}
 
 		return pivotIndex;
-
 	}
 }
+
 void quickSort(string  TutorArray[][13], int start, int end, int sortField)
 {
 
@@ -366,10 +434,11 @@ void quickSort(string  TutorArray[][13], int start, int end, int sortField)
 	// Sorting the right part
 	quickSort(TutorArray, p + 1, end, sortField);
 }
-//		quick sort code end here
+// quick sort code end here
 
 
-//		linear search code
+// SEARCH
+// linear search code
 bool linearSearch()
 {
 	// store position 
@@ -386,7 +455,6 @@ bool linearSearch()
 	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
 	cin >> searchType;
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
 
 	if (searchType == 1)
 	{
@@ -431,28 +499,33 @@ bool linearSearch()
 			// Update position
 			position++;
 		}
-
 	}
 	else
 	{
 		cout << "Invalid input ";
-
 	}
-
 
 	// return T = found element, F = element not found
 	return found;
 }
-//		linear search code end here
+// linear search code end here
 
 
-int main() {
-	addTutor();
+
+
+// MAIN FUNCTION
+int main()
+{
+	int userInput = 0;
+	int option = 0;
+	// todo menu for sort add the loop and error thing here the invalid input
+	int sortField = 0;
+	int status = login();
+
 
 	// searching
 	cout << linearSearch() << endl;
 	//will show T or F success or F
-
 
 
 	// todo menu for sort add the loop and error thing here the invalid input
@@ -467,7 +540,170 @@ int main() {
 
 
 
-	displayTutor();
+	// HR menu
+	if (status == 101)
+	{
+		userInput = 1;
+
+		// display predefined tutor list
+		TutorArray[100][13];
+
+		while (userInput == 1)
+		{
+			do
+			{
+				cout << string(30, '-') << " Welcome to Tutor Management System, HR! " << string(30, '-') << endl;
+				cout << "(1) Add Tutor Record" << endl;
+				cout << "(2) Display Tutor Record" << endl;
+				cout << "(3) Search Tutor Record" << endl;
+				cout << "(4) Sort Tutor Record" << endl;
+				cout << "(5) Update Tutor Record" << endl;
+				cout << "(6) Delete Tutor Record" << endl;
+				cout << "(0) Exit Tutor Management System" << endl << endl;
+				cout << "Please enter an option: ";
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cin >> option;
+
+				if (cin.fail() || (option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6 && option != 0))
+				{
+					cout << endl << endl << "Invalid option! Please enter a valid option!" << endl << endl << endl;
+				}
+			} while (cin.fail() || (option != 1 && option != 2 && option != 3 && option != 4 && option != 5 && option != 6 && option != 0));
+
+			switch (option)
+			{
+			case 1:
+				cout << endl << endl;
+				addTutor();
+				continue;
+			case 2:
+				cout << endl << endl;
+				displayTutor();
+				continue;
+			case 3:
+			//	cout << endl << endl;
+			//	if (linearSearch(head) == false)
+			//	{
+			//		cout << "Unable to find tutor record!" << endl << endl << endl;
+			//	}
+				continue;
+			case 4:
+			//	cout << endl << endl;
+			//	do {
+			//		// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
+			//		cin.clear();
+			//		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			//		cout << "Please select a field to sort tutor record." << endl;
+			//		cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
+			//		cout << "Please enter an option: ";
+			//		cin >> sortField;
+			//		cout << endl << endl;
+
+			//		if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
+			//		{
+			//			cout << "Invalid option! Please enter a valid option!" << endl << endl;
+			//		}
+
+			//		mergeSort(head, sortField);
+			//		displayTutor();
+			//	} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
+				continue;
+			//case 5:
+			//	cout << endl << endl;
+			//	updateTutor();
+			//	continue;
+			//case 6:
+			//	cout << endl << endl;
+			//	deleteTutor();
+				continue;
+			case 0:
+				exit(0);
+				break;
+			default:
+				cout << endl << endl << "Invalid option! Please enter a valid option!" << endl << endl << endl;
+				continue;
+			}
+		}
+	}
+	// admin menu
+	else if (status == 102)
+	{
+		userInput = 1;
+
+		// display predefined tutor list
+		TutorArray[100][13];
+
+		while (userInput == 1)
+		{
+			do
+			{
+				cout << string(30, '-') << " Welcome to Tutor Management System, Admin! " << string(30, '-') << endl;
+				cout << "(1) Add Tutor Record" << endl;
+				cout << "(2) Display Tutor Record" << endl;
+				cout << "(3) Search Tutor Record" << endl;
+				cout << "(4) Sort Tutor Record" << endl;
+				cout << "(0) Exit Tutor Management System" << endl << endl;
+				cout << "Please enter an option: ";
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cin >> option;
+
+				if (cin.fail() || (option != 1 && option != 2 && option != 3 && option != 4 && option != 0))
+				{
+					cout << endl << endl << "Invalid option! Please enter a valid option!" << endl << endl << endl;
+				}
+			} while (cin.fail() || (option != 1 && option != 2 && option != 3 && option != 4 && option != 0));
+
+			switch (option)
+			{
+			case 1:
+				cout << endl << endl;
+				addTutor();
+				continue;
+			case 2:
+				cout << endl << endl;
+				displayTutor();
+				continue;
+			case 3:
+			//	cout << endl << endl;
+			//	if (linearSearch(head) == false)
+			//	{
+			//		cout << "Unable to find tutor record!" << endl << endl << endl;
+			//	}
+				continue;
+			case 4:
+			//	cout << endl << endl;
+			//	do {
+			//		// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
+			//		cin.clear();
+			//		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			//		cout << "Please select a field to sort tutor record." << endl;
+			//		cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
+			//		cout << "Please enter an option: ";
+			//		cin >> sortField;
+			//		cout << endl << endl;
+
+			//		if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
+			//		{
+			//			cout << "Invalid option! Please enter a valid option!" << endl << endl;
+			//		}
+
+			//		mergeSort(head, sortField);
+			//		displayTutor();
+			//	} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
+				continue;
+			case 0:
+				exit(0);
+				break;
+			default:
+				cout << endl << endl << "Invalid option! Please enter a valid option!" << endl << endl << endl;
+				continue;
+			}
+		}
+	}
+
+
 
 
 	return 0;
