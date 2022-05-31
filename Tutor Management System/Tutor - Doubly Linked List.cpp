@@ -104,25 +104,11 @@ void displayTutor()
 
 	while (current != NULL)
 	{
-		//for (int position = 1; position <= ::sizeofLinkedList; position++)
-		//{
+		for (int position = 1; position <= ::sizeofLinkedList; position++)
+		{
 			displayDetails(12, current);
-			//cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
-			//cout << "Tutor ID\t\t: " << current->tutorID << "\n" <<
-			//	"Name\t\t\t: " << current->name << "\n" <<
-			//	"Date Joined\t\t: " << current->dateJoined << "\n"
-			//	"Date Terminated\t\t: " << current->dateTerminated << "\n" <<
-			//	"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << current->hourlyPayRate << "\n" <<
-			//	"Email\t\t\t: " << current->email << "\n" <<
-			//	"Phone Number\t\t: " << current->phoneNumber << "\n" <<
-			//	"Address\t\t\t: " << current->address << "\n" <<
-			//	"Tuition Center Code\t: " << current->tuitionCenterCode << "\n" <<
-			//	"Tution Center Name\t: " << current->tuitionCenterName << "\n" <<
-			//	"Subject Code\t\t: " << current->subjectCode << "\n" <<
-			//	"Subject Name\t\t: " << current->subjectName << "\n" <<
-			//	"Rating\t\t\t: " << current->rating << endl << endl << endl;
 			current = current->nextAddress;
-		//}
+		}
 	}
 }
 
@@ -134,7 +120,7 @@ void predefinedTutorList()
 	// empty the list
 	head = tail = NULL;
 
-	Tutor* newNode = createNewNode(4, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 2);
+	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 2);
 	addTutorProcess(newNode);
 
 	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 5);
