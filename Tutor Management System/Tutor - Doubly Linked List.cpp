@@ -76,6 +76,25 @@ Tutor* createNewNode(int tutorID, string name, string dateJoined, string dateTer
 
 
 // DISPLAY
+//display individual record
+void displayDetails(int position, Tutor* current)
+{
+	cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
+	cout << "Tutor ID\t\t: " << current->tutorID << "\n" <<
+		"Name\t\t\t: " << current->name << "\n" <<
+		"Date Joined\t\t: " << current->dateJoined << "\n"
+		"Date Terminated\t\t: " << current->dateTerminated << "\n" <<
+		"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << current->hourlyPayRate << "\n" <<
+		"Email\t\t\t: " << current->email << "\n" <<
+		"Phone Number\t\t: " << current->phoneNumber << "\n" <<
+		"Address\t\t\t: " << current->address << "\n" <<
+		"Tuition Center Code\t: " << current->tuitionCenterCode << "\n" <<
+		"Tution Center Name\t: " << current->tuitionCenterName << "\n" <<
+		"Subject Code\t\t: " << current->subjectCode << "\n" <<
+		"Subject Name\t\t: " << current->subjectName << "\n" <<
+		"Rating\t\t\t: " << current->rating << endl << endl << endl;
+}
+
 // display tutor list for process function and main function
 void displayTutor()
 {
@@ -85,26 +104,29 @@ void displayTutor()
 
 	while (current != NULL)
 	{
-		for (int position = 1; position <= ::sizeofLinkedList; position++)
-		{
-			cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
-			cout << "Tutor ID\t\t: " << current->tutorID << "\n" <<
-				"Name\t\t\t: " << current->name << "\n" <<
-				"Date Joined\t\t: " << current->dateJoined << "\n"
-				"Date Terminated\t\t: " << current->dateTerminated << "\n" <<
-				"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << current->hourlyPayRate << "\n" <<
-				"Email\t\t\t: " << current->email << "\n" <<
-				"Phone Number\t\t: " << current->phoneNumber << "\n" <<
-				"Address\t\t\t: " << current->address << "\n" <<
-				"Tuition Center Code\t: " << current->tuitionCenterCode << "\n" <<
-				"Tution Center Name\t: " << current->tuitionCenterName << "\n" <<
-				"Subject Code\t\t: " << current->subjectCode << "\n" <<
-				"Subject Name\t\t: " << current->subjectName << "\n" <<
-				"Rating\t\t\t: " << current->rating << endl << endl << endl;
+		//for (int position = 1; position <= ::sizeofLinkedList; position++)
+		//{
+			displayDetails(12, current);
+			//cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
+			//cout << "Tutor ID\t\t: " << current->tutorID << "\n" <<
+			//	"Name\t\t\t: " << current->name << "\n" <<
+			//	"Date Joined\t\t: " << current->dateJoined << "\n"
+			//	"Date Terminated\t\t: " << current->dateTerminated << "\n" <<
+			//	"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << current->hourlyPayRate << "\n" <<
+			//	"Email\t\t\t: " << current->email << "\n" <<
+			//	"Phone Number\t\t: " << current->phoneNumber << "\n" <<
+			//	"Address\t\t\t: " << current->address << "\n" <<
+			//	"Tuition Center Code\t: " << current->tuitionCenterCode << "\n" <<
+			//	"Tution Center Name\t: " << current->tuitionCenterName << "\n" <<
+			//	"Subject Code\t\t: " << current->subjectCode << "\n" <<
+			//	"Subject Name\t\t: " << current->subjectName << "\n" <<
+			//	"Rating\t\t\t: " << current->rating << endl << endl << endl;
 			current = current->nextAddress;
-		}
+		//}
 	}
 }
+
+
 
 // predefined tutor list
 void predefinedTutorList()
@@ -112,13 +134,13 @@ void predefinedTutorList()
 	// empty the list
 	head = tail = NULL;
 
-	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 3);
+	Tutor* newNode = createNewNode(4, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 2);
 	addTutorProcess(newNode);
 
 	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 5);
 	addTutorProcess(newNode);
 
-	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 4);
+	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 2);
 	addTutorProcess(newNode);
 }
 
@@ -810,8 +832,6 @@ bool linearSearch(Tutor* head)
 	// if search term exist
 	bool found = false;
 
-	// todo complete this add the loop and error thing when input is incorrect
-	// linearSearch(head, int searchType, int SearchId, double searchRating)
 	int searchType = 0;
 	int searchId = 0;
 	double searchRating = 0;
@@ -852,8 +872,8 @@ bool linearSearch(Tutor* head)
 		// print print out the index
 		if (temp->tutorID == searchId) {
 
-			// todo add printing the details
-			cout << "Found Tutor ID at: Position " << position + 1 << endl << endl << endl;
+			// print details
+			displayDetails(position + 1, temp);
 
 			//item found
 			found = true;
@@ -869,13 +889,11 @@ bool linearSearch(Tutor* head)
 
 		// go throgh the whole linked list (for rating)
 		while (temp->nextAddress != NULL) {
-
 			// print print out the index
 			if (temp->rating == searchRating) {
 
-				// todo add printing the details
-				cout << "Found rating at: Position " << position + 1 << endl << endl << endl;
-
+				// print details
+				displayDetails(position + 1, temp);
 				//item found
 				found = true;
 			}
@@ -886,10 +904,16 @@ bool linearSearch(Tutor* head)
 			// Update temp data
 			temp = temp->nextAddress;
 		}
-	}
-	else
-	{
-		cout << "Invalid Tutor ID!";
+
+		// print print out the index
+		if (temp->rating == searchRating) {
+
+			// print details
+			displayDetails(position + 1, temp);
+
+			//item found
+			found = true;
+		}
 	}
 
 	// return T = found element, F = element not found
