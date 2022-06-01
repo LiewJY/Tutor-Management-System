@@ -1,15 +1,19 @@
+#include <chrono>
 #include <iostream>
+#include <cstdlib>
+#include <iomanip>
 #include <string>
 #include <regex>
-#include <iomanip>
 #include "Validation.h"
 
 using namespace std;
+using namespace std::chrono;
 
 // predefined tutor list
 string TutorArray[100][13] = {
 	{"1", "John", "20/1/2018", "30/6/2019", "62.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "3"},
 	{"2", "May", "6/3/2018", "NA", "75.00", "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "5"},
+
 	{"3", "Brian", "3/8/2019", "NA", "68.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4"}
 };
 
@@ -24,12 +28,31 @@ int getRow()
 	{
 		row++;
 	}
-
 	return row;
 }
 
 
 // DISPLAY
+//display individual record
+void displayDetails(int row) {
+	cout << string(40, '-') << " [" << "Position: " << row + 1 << "] " << string(40, '-') << endl;
+	cout << "Tutor ID\t\t: " << stoi(TutorArray[row][0]) << "\n" <<
+		"Name\t\t\t: " << TutorArray[row][1] << "\n" <<
+		"Date Joined\t\t: " << TutorArray[row][2] << "\n"
+		"Date Terminated\t\t: " << TutorArray[row][3] << "\n" <<
+		"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << stod(TutorArray[row][4]) << "\n" <<
+		"Email\t\t\t: " << TutorArray[row][5] << "\n" <<
+		"Phone Number\t\t: " << TutorArray[row][6] << "\n" <<
+		"Address\t\t\t: " << TutorArray[row][7] << "\n" <<
+		"Tuition Center Code\t: " << TutorArray[row][8] << "\n" <<
+		"Tution Center Name\t: " << TutorArray[row][9] << "\n" <<
+		"Subject Code\t\t: " << TutorArray[row][10] << "\n" <<
+		"Subject Name\t\t: " << TutorArray[row][11] << "\n" <<
+		"Rating\t\t\t: " << stoi(TutorArray[row][12]) << endl << endl;
+	cout << endl;
+}
+
+
 // display tutor for main function
 void displayTutor()
 {
@@ -39,21 +62,7 @@ void displayTutor()
 
 	while (row < getRow())
 	{
-		cout << string(40, '-') << " [" << "Position: " << row + 1 << "] " << string(40, '-') << endl;
-		cout << "Tutor ID\t\t: " << stoi(TutorArray[row][0]) << "\n" <<
-			"Name\t\t\t: " << TutorArray[row][1] << "\n" <<
-			"Date Joined\t\t: " << TutorArray[row][2] << "\n"
-			"Date Terminated\t\t: " << TutorArray[row][3] << "\n" <<
-			"Hourly Pay Rate\t\t: RM " << fixed << setprecision(2) << stod(TutorArray[row][4]) << "\n" <<
-			"Email\t\t\t: " << TutorArray[row][5] << "\n" <<
-			"Phone Number\t\t: " << TutorArray[row][6] << "\n" <<
-			"Address\t\t\t: " << TutorArray[row][7] << "\n" <<
-			"Tuition Center Code\t: " << TutorArray[row][8] << "\n" <<
-			"Tution Center Name\t: " << TutorArray[row][9] << "\n" <<
-			"Subject Code\t\t: " << TutorArray[row][10] << "\n" <<
-			"Subject Name\t\t: " << TutorArray[row][11] << "\n" <<
-			"Rating\t\t\t: " << stoi(TutorArray[row][12]) << endl << endl;
-		cout << endl;
+		displayDetails(row);
 
 		row++;
 	}
@@ -446,15 +455,26 @@ bool linearSearch()
 	// if search term exist
 	bool found = false;
 
-	// todo complete this add the loop and error thing when input is incorrect
 	int searchType = 0;
 	int searchId = 0;
 	double searchRating = 0;
+	int row = getRow();
 
-	// ask user to select field to search from
-	cout << "Please Select search type: " << endl << "1-Tutor ID, 2-Rating: ";
-	cin >> searchType;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	do
+	{
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Please select search type." << endl;
+		cout << "(1) Tutor ID // (2) Rating" << endl << endl;
+		cout << "Please enter an option: ";
+		cin >> searchType;
+		cout << endl;
+
+		if (cin.fail() || (searchType != 1 && searchType != 2))
+		{
+			cout << "Invalid option! Please enter a valid option!" << endl << endl;
+		}
+	} while (cin.fail() || (searchType != 1 && searchType != 2));
 
 	if (searchType == 1)
 	{
@@ -463,19 +483,19 @@ bool linearSearch()
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 		//go throgh the array (for id)
-		while (stoi(TutorArray[position][0]) != searchId && position < getRow()) {
+		while (position < row) {
+			if (stoi(TutorArray[position][0]) == searchId) {
+
+				// printing the details
+				displayDetails(position);
+				//item found
+				found = true;
+			}
 			// Update position
 			position++;
 		}
 		// print print out the index
-		if (stoi(TutorArray[position][0]) == searchId) {
 
-			// todo add printing the details
-			cout << "Found id at :" << position + 1 << endl;
-
-			//item found
-			found = true;
-		}
 	}
 
 	else if (searchType == 2)
@@ -485,14 +505,13 @@ bool linearSearch()
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 		// go throgh the whole array (for rating)
-		while (position < getRow()) {
+		while (position < row) {
 
 			// print print out the index
-			if (stod(TutorArray[position][2]) == searchRating) {
+			if (stod(TutorArray[position][12]) == searchRating) {
 
-				// todo add printing the details
-				cout << "Found at :" << position + 1 << endl;
-
+				// printing the details
+				displayDetails(position);
 				//item found
 				found = true;
 			}
@@ -510,7 +529,75 @@ bool linearSearch()
 }
 // linear search code end here
 
+//// LOGIN
+int login() {
+	//variables to authenticate and determine user type
+	int userType;
+	int userInput = 1;
+	int status = 0;
+	string username, password;
 
+	while (userInput == 1) 
+	{
+		// ask user to select user type and enter username and password
+		cout << "Please select a user type to login." << endl;
+		cout << "(1) HR // (Others) Admin" << endl << endl;
+		cout << "Please enter an option: ";
+		cin >> userType;
+		cout << endl;
+
+		cin.clear();
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		cout << "Enter Username: ";
+		cin >> username;
+		cout << "Enter Password: ";
+		cin >> password;
+		cout << endl;
+
+		// check user type and validate username and password
+		if (userType == 1)
+		{
+			if (username == "hr" && password == "123") {
+				cout << "Logged in successfully! Welcome HR!" << endl << endl << endl;
+				// set the status to success (HR menu) & stop this loop
+				status = 101;
+				userInput = 2;
+			}
+		}
+		else
+		{
+			if (username == "admin" && password == "123") {
+				cout << "Logged in successfully! Welcome Admin!" << endl << endl << endl;
+				// set the status to success (Admin menu) & stop this loop
+				status = 102;
+				userInput = 2;
+			}
+		}
+
+		// incorrect credentials ask user do they want to retry
+		if (status == 0)
+		{
+			do
+			{
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Incorrect username and password!" << endl;
+				cout << "(1) Login Again // (0) Exit Tutor Management System" << endl << endl;
+				cout << "Please enter an option: ";
+				cin >> userInput;
+				cout << endl << endl;
+
+				if (cin.fail() || (userInput != 1 && userInput != 0))
+				{
+					cout << "Invalid option! Please enter a valid option!" << endl << endl;
+				}
+			} while (cin.fail() || (userInput != 1 && userInput != 0));
+		}
+	}
+
+	//return this value to determine what menu to show the user in main()
+	return status;
+}
 
 
 // MAIN FUNCTION
@@ -518,35 +605,19 @@ int main()
 {
 	int userInput = 0;
 	int option = 0;
-	// todo menu for sort add the loop and error thing here the invalid input
+
 	int sortField = 0;
 	int status = login();
 
-
-	// searching
-	cout << linearSearch() << endl;
-	//will show T or F success or F
-
-
-	// todo menu for sort add the loop and error thing here the invalid input
-	int sortField = 0;
-	// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
-	cout << "sort" << endl;
-	cout << "Please Select Field to sort: " << endl << "1-Tutor ID, 2-Hourly Pay Rate, 3-Rating: ";
-	cin >> sortField;
-	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	quickSort(TutorArray, 0, getRow() - 1, sortField);
-
-
-
+	//timmer
+	auto sttar = high_resolution_clock::now();
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - sttar);
 
 	// HR menu
 	if (status == 101)
 	{
 		userInput = 1;
-
-		// display predefined tutor list
-		TutorArray[100][13];
 
 		while (userInput == 1)
 		{
@@ -582,32 +653,56 @@ int main()
 				displayTutor();
 				continue;
 			case 3:
-			//	cout << endl << endl;
-			//	if (linearSearch(head) == false)
-			//	{
-			//		cout << "Unable to find tutor record!" << endl << endl << endl;
-			//	}
+				cout << endl << endl;
+				sttar = high_resolution_clock::now();
+				if (linearSearch() == false)
+				{
+					cout << "Unable to find tutor record!" << endl << endl << endl;
+				}
+				stop = high_resolution_clock::now();
+				//display time
+				auto duration = duration_cast<microseconds>(stop - sttar);
+				cout << string(40, '-');
+				cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+				cout << " microseconds " << string(40, '-') << endl << endl;
+
 				continue;
 			case 4:
-			//	cout << endl << endl;
-			//	do {
-			//		// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
-			//		cin.clear();
-			//		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			//		cout << "Please select a field to sort tutor record." << endl;
-			//		cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
-			//		cout << "Please enter an option: ";
-			//		cin >> sortField;
-			//		cout << endl << endl;
+				cout << endl << endl;
+				do {
+					// ask user to select field to sort with 
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Please select a field to sort tutor record." << endl;
+					cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
+					cout << "Please enter an option: ";
+					cin >> sortField;
+					cout << endl << endl;
 
-			//		if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
-			//		{
-			//			cout << "Invalid option! Please enter a valid option!" << endl << endl;
-			//		}
+					if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
+					{
+						cout << "Invalid option! Please enter a valid option!" << endl << endl;
+					}
+					else
+					{
+						sttar = high_resolution_clock::now();
+						quickSort(TutorArray, 0, getRow() - 1, sortField);
+						stop = high_resolution_clock::now();
 
-			//		mergeSort(head, sortField);
-			//		displayTutor();
-			//	} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
+						displayTutor();
+
+						//display time
+						auto duration = duration_cast<microseconds>(stop - sttar);
+						cout << string(40, '-');
+						cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+						cout << " microseconds " << string(40, '-') << endl << endl;
+
+						quickSort(TutorArray, 0, getRow() - 1, 1);
+					}
+
+
+
+				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			//case 5:
 			//	cout << endl << endl;
@@ -631,8 +726,6 @@ int main()
 	{
 		userInput = 1;
 
-		// display predefined tutor list
-		TutorArray[100][13];
 
 		while (userInput == 1)
 		{
@@ -666,32 +759,54 @@ int main()
 				displayTutor();
 				continue;
 			case 3:
-			//	cout << endl << endl;
-			//	if (linearSearch(head) == false)
-			//	{
-			//		cout << "Unable to find tutor record!" << endl << endl << endl;
-			//	}
+				cout << endl << endl;
+				sttar = high_resolution_clock::now();
+
+				if (linearSearch() == false)
+				{
+					cout << "Unable to find tutor record!" << endl << endl << endl;
+				}
+				stop = high_resolution_clock::now();
+				//display time
+				auto duration = duration_cast<microseconds>(stop - sttar);
+				cout << string(40, '-');
+				cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+				cout << " microseconds " << string(40, '-') << endl << endl;
+
 				continue;
 			case 4:
-			//	cout << endl << endl;
-			//	do {
-			//		// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
-			//		cin.clear();
-			//		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-			//		cout << "Please select a field to sort tutor record." << endl;
-			//		cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
-			//		cout << "Please enter an option: ";
-			//		cin >> sortField;
-			//		cout << endl << endl;
+				cout << endl << endl;
+				do {
+					// ask user to select field to sort with MUST PUT HERE BECASUE THE FUNCTION ABOVE ALL ARE RECURSUE
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Please select a field to sort tutor record." << endl;
+					cout << "(1) Tutor ID // (2) Hourly Pay Rate // (3) Rating" << endl << endl;
+					cout << "Please enter an option: ";
+					cin >> sortField;
+					cout << endl << endl;
 
-			//		if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
-			//		{
-			//			cout << "Invalid option! Please enter a valid option!" << endl << endl;
-			//		}
+					if (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3))
+					{
+						cout << "Invalid option! Please enter a valid option!" << endl << endl;
+					}
+					else
+					{
+						sttar = high_resolution_clock::now();
+						quickSort(TutorArray, 0, getRow() - 1, sortField);
+						stop = high_resolution_clock::now();
 
-			//		mergeSort(head, sortField);
-			//		displayTutor();
-			//	} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
+						displayTutor();
+
+						//display time
+						auto duration = duration_cast<microseconds>(stop - sttar);
+						cout << string(40, '-');
+						cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+						cout << " microseconds " << string(40, '-') << endl << endl;
+
+						quickSort(TutorArray, 0, getRow() - 1, 1);
+					}
+				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			case 0:
 				exit(0);

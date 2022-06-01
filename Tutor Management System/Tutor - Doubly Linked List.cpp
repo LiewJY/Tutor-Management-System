@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 #include <string>
 #include <regex>
@@ -5,6 +6,7 @@
 #include "Validation.h"
 
 using namespace std;
+using namespace std::chrono;
 
 int sizeofLinkedList = 0; // initialize size of linked list to 0
 
@@ -922,6 +924,12 @@ int main()
 	int sortField = 0;
 	int status = login();
 
+
+	//timmer
+	auto start = high_resolution_clock::now();
+	auto stop = high_resolution_clock::now();
+	auto duration = duration_cast<microseconds>(stop - start);
+
 	// HR menu
 	if (status == 101)
 	{
@@ -965,10 +973,18 @@ int main()
 				continue;
 			case 3:
 				cout << endl << endl;
+				start = high_resolution_clock::now();
 				if (linearSearch(head) == false)
 				{
 					cout << "Unable to find tutor record!" << endl << endl << endl;
 				}
+				stop = high_resolution_clock::now();
+				//display time
+				auto duration = duration_cast<microseconds>(stop - start);
+				cout << string(40, '-');
+				cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+				cout << " microseconds " << string(40, '-') << endl << endl;
+
 				continue;
 			case 4:
 				cout << endl << endl;
@@ -986,21 +1002,36 @@ int main()
 					{
 						cout << "Invalid option! Please enter a valid option!" << endl << endl;
 					}
+					else
+					{
+						start = high_resolution_clock::now();
+						mergeSort(head, sortField);
+						stop = high_resolution_clock::now();
 
-					mergeSort(head, sortField);
 
-					while (head->previousAddress != NULL)
-						head = head->previousAddress;
+						while (head->previousAddress != NULL)
+							head = head->previousAddress;
 
-					displayTutor();
+						displayTutor();
+						//display time
+						auto duration = duration_cast<microseconds>(stop - start);
+						cout << string(40, '-');
+						cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+						cout << " microseconds " << string(40, '-') << endl << endl;
 
-					mergeSort(head, 1);
+						mergeSort(head, 1);
 
+						while (head->previousAddress != NULL)
+							head = head->previousAddress;
+					}
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			case 5:
 				cout << endl << endl;
 				updateTutor(head);
+
+				while (head->previousAddress != NULL)
+					head = head->previousAddress;
 				continue;
 			case 6:
 				cout << endl << endl;
@@ -1056,10 +1087,18 @@ int main()
 				continue;
 			case 3:
 				cout << endl << endl;
+				start = high_resolution_clock::now();
+
 				if (linearSearch(head) == false)
 				{
 					cout << "Unable to find tutor record!" << endl << endl << endl;
 				}
+				stop = high_resolution_clock::now();
+				//display time1
+				auto duration = duration_cast<microseconds>(stop - start);
+				cout << string(40, '-');
+				cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+				cout << " microseconds " << string(40, '-') << endl << endl;
 				continue;
 			case 4:
 				cout << endl << endl;
@@ -1077,15 +1116,29 @@ int main()
 					{
 						cout << "Invalid option! Please enter a valid option!" << endl << endl;
 					}
+					else
+					{
+						start = high_resolution_clock::now();
+						mergeSort(head, sortField);
+						stop = high_resolution_clock::now();
 
-					mergeSort(head, sortField);
 
-					while (head->previousAddress != NULL)
-						head = head->previousAddress;
+						while (head->previousAddress != NULL)
+							head = head->previousAddress;
 
-					displayTutor();
+						displayTutor();
+						//display time
+						auto duration = duration_cast<microseconds>(stop - start);
+						cout << string(40, '-');
+						cout << " TIME TAKEN: " << fixed << setprecision(20) << duration.count();
+						cout << " microseconds " << string(40, '-') << endl << endl;
 
-					mergeSort(head, 1);
+						mergeSort(head, 1);
+
+						while (head->previousAddress != NULL)
+							head = head->previousAddress;
+					}
+
 
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
