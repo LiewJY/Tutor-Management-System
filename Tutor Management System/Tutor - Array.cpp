@@ -324,7 +324,7 @@ void updateTutor()
 	int year = 2000;
 	string newDateTerminated, newPhoneNumber, newAddress;
 	int row = getRow();
-	//bool found = false;
+	bool found = false;
 
 	displayTutor();
 
@@ -338,7 +338,7 @@ void updateTutor()
 		if (stoi(TutorArray[position][0]) == searchTutorID) {
 
 			displayDetails(position); // display tutor list of this id
-			//found = true;
+			found = true;
 
 			do
 			{
@@ -426,7 +426,7 @@ void updateTutor()
 	}
 
 	// if the program cannot find the tutor id entered by user
-	if (stoi(TutorArray[position][0]) != searchTutorID)
+	if (found == false)
 	{
 		cout << "Unable to find Tutor ID! Please try again!" << endl << endl << endl;
 	}
