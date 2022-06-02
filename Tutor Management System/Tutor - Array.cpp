@@ -312,7 +312,129 @@ void addTutor()
 }
 
 
-void editTutor();
+// UPDATE
+// update tutor for main function
+void updateTutor()
+{
+	int position = 0;
+	int searchTutorID = 0;
+	int userInput = 0;
+	int day = 1;
+	int month = 1;
+	int year = 2000;
+	string newDateTerminated, newPhoneNumber, newAddress;
+	int row = getRow();
+	//bool found = false;
+
+	displayTutor();
+
+	// ask user to enter tutor ID
+	cout << "Please enter Tutor ID to update: ";
+	cin >> searchTutorID;
+	cout << endl << endl;
+
+	// go through the array (for id)
+	while (position < row) {
+		if (stoi(TutorArray[position][0]) == searchTutorID) {
+
+			displayDetails(position); // display tutor list of this id
+			//found = true;
+
+			do
+			{
+				// ask user which data field they would like to edit
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Which data you would like to update?" << endl;
+				cout << "(1) Date Terminated // (2) Phone Number // (3) Address" << endl << endl;
+				cout << "Please enter an option: ";
+				cin >> userInput;
+				cout << endl << endl;
+
+				if (cin.fail() || (userInput != 1 && userInput != 2 && userInput != 3))
+				{
+					cout << "Invaliad option! Please enter a valid option!" << endl << endl;
+				}
+			} while (cin.fail() || (userInput != 1 && userInput != 2 && userInput != 3));
+
+			switch (userInput)
+			{
+			case 1:
+				do
+				{
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Enter New Date Terminated:-\nEnter Day (22): ";
+					cin >> day;
+					cout << "Enter Month (2): ";
+					cin >> month;
+					cout << "Enter Year (2022): ";
+					cin >> year;
+					cout << endl;
+
+					newDateTerminated = to_string(day) + '/' + to_string(month) + '/' + to_string(year);
+
+					TutorArray[position][3] = newDateTerminated;
+
+					if (cin.fail() || !dateValidation(day, month, year))
+					{
+						cout << endl << "Invalid date! Please enter a valid date!" << endl;
+					}
+				} while (cin.fail() || !dateValidation(day, month, year));
+
+				cout << "\"" << TutorArray[position][1] << "\" date terminated updated successfully!" << endl << endl << endl;
+
+				break;
+			case 2:
+				do
+				{
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					cout << "Enter New Phone Number: ";
+					cin >> newPhoneNumber;
+					cout << endl;
+
+					TutorArray[position][6] = newPhoneNumber;
+
+					if (cin.fail() || !phoneNumberValidation(newPhoneNumber) || newPhoneNumber.length() < 10 || newPhoneNumber.length() > 11)
+					{
+						cout << "Invalid phone number! Please enter a valid phone number in 10 or 11 numbers!" << endl;
+					}
+				} while (cin.fail() || !phoneNumberValidation(newPhoneNumber) || newPhoneNumber.length() < 10 || newPhoneNumber.length() > 11);
+
+				cout << "\"" << TutorArray[position][6] << "\" phone number updated successfully!" << endl << endl << endl;
+
+				break;
+			case 3:
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cout << "Enter New Address: ";
+				getline(cin, newAddress);
+				cout << endl;
+
+				TutorArray[position][7] = newAddress;
+
+				cout << "\"" << TutorArray[position][7] << "\" address updated successfully!" << endl << endl << endl;
+
+				break;
+			}
+
+			displayTutor();
+		}
+		
+		position++; // update position
+	}
+
+	// if the program cannot find the tutor id entered by user
+	if (stoi(TutorArray[position][0]) != searchTutorID)
+	{
+		cout << "Unable to find Tutor ID! Please try again!" << endl << endl << endl;
+	}
+}
+
+
+// DELETE
+// delete tutor for main function
 void deleteTutor();
 
 
@@ -478,17 +600,17 @@ bool linearSearch()
 
 	if (searchType == 1)
 	{
-		cout << "Please enter Id: ";
+		cout << "Please enter Tutor ID: ";
 		cin >> searchId;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		//go throgh the array (for id)
+		// go through the array (for id)
 		while (position < row) {
 			if (stoi(TutorArray[position][0]) == searchId) {
 
 				// printing the details
 				displayDetails(position);
-				//item found
+				// item found
 				found = true;
 			}
 			// Update position
@@ -497,14 +619,13 @@ bool linearSearch()
 		// print print out the index
 
 	}
-
 	else if (searchType == 2)
 	{
 		cout << "Please enter rating: ";
 		cin >> searchRating;
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-		// go throgh the whole array (for rating)
+		// go through the whole array (for rating)
 		while (position < row) {
 
 			// print print out the index
@@ -512,7 +633,7 @@ bool linearSearch()
 
 				// printing the details
 				displayDetails(position);
-				//item found
+				// item found
 				found = true;
 			}
 			// Update position
@@ -529,7 +650,8 @@ bool linearSearch()
 }
 // linear search code end here
 
-//// LOGIN
+
+// LOGIN
 int login() {
 	//variables to authenticate and determine user type
 	int userType;
@@ -605,7 +727,6 @@ int main()
 {
 	int userInput = 0;
 	int option = 0;
-
 	int sortField = 0;
 	int status = login();
 
@@ -655,11 +776,13 @@ int main()
 			case 3:
 				cout << endl << endl;
 				sttar = high_resolution_clock::now();
+
 				if (linearSearch() == false)
 				{
 					cout << "Unable to find tutor record!" << endl << endl << endl;
 				}
 				stop = high_resolution_clock::now();
+
 				//display time
 				auto duration = duration_cast<microseconds>(stop - sttar);
 				cout << string(40, '-');
@@ -704,10 +827,10 @@ int main()
 
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
-			//case 5:
-			//	cout << endl << endl;
-			//	updateTutor();
-			//	continue;
+			case 5:
+				cout << endl << endl;
+				updateTutor();
+				continue;
 			//case 6:
 			//	cout << endl << endl;
 			//	deleteTutor();
@@ -725,7 +848,6 @@ int main()
 	else if (status == 102)
 	{
 		userInput = 1;
-
 
 		while (userInput == 1)
 		{
@@ -767,6 +889,7 @@ int main()
 					cout << "Unable to find tutor record!" << endl << endl << endl;
 				}
 				stop = high_resolution_clock::now();
+
 				//display time
 				auto duration = duration_cast<microseconds>(stop - sttar);
 				cout << string(40, '-');
