@@ -433,6 +433,30 @@ void updateTutor()
 	}
 }
 
+// DELETE
+// check if date terminated > 6 months before deletion
+bool getDifference(int day, int month, int year)
+{
+	bool pass = false;
+	int terminated, current, differences;
+
+	// calculate termimated months
+	terminated = year * 12 + month;
+
+	time_t t = time(0);
+	tm* timePtr = localtime(&t);
+	// calculate current months
+	current = timePtr->tm_mon + (timePtr->tm_year + 1900) * 12;
+	// calcualte difference
+	differences = current - terminated;
+
+	if (differences >= 6)
+	{
+		pass = true;
+	}
+
+	return pass;
+}
 
 // DELETE
 // delete tutor for main function
@@ -464,28 +488,45 @@ void deleteTutor() {
 			//delete record form selected position
 			if (i == userInput - 1)
 			{
-				tempName = TutorArray[i][1];
-				//shift foward
-				for (int move = i; move < (getRow() - 1); move++)
-				{
-					for (int col = 0; col < 12; col++)
-					{
-						TutorArray[move][col] = TutorArray[move + 1][col];
-					}
-				}
-				//exit for loop
-				break;
+				string terminationDate = TutorArray[i][3];
+				int day, month, year;
 
+				sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
+
+				if (terminationDate == "NA")
+				{
+					cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
+				}
+				else if (getDifference(day, month, year) == true)
+				{
+					tempName = TutorArray[i][1];
+					//shift foward
+					for (int move = i; move < (getRow() - 1); move++)
+					{
+						for (int col = 0; col < 12; col++)
+						{
+							TutorArray[move][col] = TutorArray[move + 1][col];
+						}
+					}
+					// clear last row
+					int lastRow = getRow() - 1;
+					for (int clearRow = 0; clearRow < 12; clearRow++)
+					{
+						TutorArray[lastRow][clearRow] = "";
+					}
+
+					cout << "\"" << tempName << "\" record deleted successfully!" << endl << endl << endl;
+
+
+				}
+				else
+				{
+					cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
+				}
 			}
 		}
-		// clear last row
-		int lastRow = getRow() - 1;
-		for (int clearRow = 0; clearRow < 12; clearRow++)
-		{
-			TutorArray[lastRow][clearRow] = "";
-		}
 
-		cout <<  "\"" << tempName << "\" record is deleted successfully!" << endl << endl << endl;
+
 
 
 		displayTutor();
