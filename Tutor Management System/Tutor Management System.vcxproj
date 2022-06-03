@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Tutor - Array.cpp" />
     <ClCompile Include="Tutor - Doubly Linked List.cpp" />
   </ItemGroup>
   <ItemGroup>
