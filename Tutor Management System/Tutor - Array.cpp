@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include <chrono>
 #include <iostream>
 #include <cstdlib>
@@ -11,15 +13,18 @@ using namespace std::chrono;
 
 // predefined tutor list
 string TutorArray[100][13] = {
-	{"1", "John", "20/1/2018", "30/6/2019", "62.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "3"},
-	{"2", "May", "6/3/2018", "NA", "75.00", "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "5"},
-	{"3", "Brian", "3/8/2019", "NA", "68.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4"}
+	{"1", "John", "20/1/2018", "30/6/2019", "62.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS2232", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "4"},
+	{"2", "May", "6/3/2018", "NA", "75.00", "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS2232", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "5"},
+	{"3", "Brian", "3/8/2019", "NA", "68.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4"},
+	{"4", "Tom", "5/4/2020", "30/5/2021", "55.80", "tom@gmail.com", "0163423143", "16, Jalan Kajang, Bandar Kajang, 43000 Kajang, Selangor.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "CHE5622", "Chemistry", "3"},
+	{"5", "Chan", "9/20/2017", "NA", "78.00", "chan@gmail.com", "0126454328", "21, Jalan Low Ti Kok, Bandar Kajang, 43000 Kajang, Selangor.", "KAJ2015", "eXcel Tuition Center (Kajang)", "ENG5932", "English", "5"},
+	{"6", "Lee", "3/1/2019", "18/3/2022", "63.50", "lee@gmail.com", "0173354598", "2-26, Jalan Bukit Mewah 1, Taman Bukit Mewah, 43000 Kajang, Selangor.", "KAJ2015", "eXcel Tuition Center (Kajang)", "SEJ8866", "Sejarah", "4"}
 };
 
 // get data row
 int getRow()
 {
-	//calculate size
+	// calculate size
 	int arraySize = sizeof(TutorArray) / sizeof(TutorArray[0]);
 	int row = 0;
 
@@ -32,7 +37,7 @@ int getRow()
 
 
 // DISPLAY
-//display individual record
+// display individual record
 void displayDetails(int row) {
 	cout << string(40, '-') << " [" << "Position: " << row + 1 << "] " << string(40, '-') << endl;
 	cout << "Tutor ID\t\t: " << stoi(TutorArray[row][0]) << "\n" <<
@@ -50,7 +55,6 @@ void displayDetails(int row) {
 		"Rating\t\t\t: " << stoi(TutorArray[row][12]) << endl << endl;
 	cout << endl;
 }
-
 
 // display tutor for main function
 void displayTutor()
@@ -75,7 +79,7 @@ void addTutor()
 {
 	// variables to read from user input
 	int userInput = 1;
-	int tutorID = 4;
+	int tutorID;
 	string name;
 	int day = 1;
 	int month = 1;
@@ -91,8 +95,6 @@ void addTutor()
 	string subjectCode;
 	string subjectName;
 	int rating = 0;
-
-	displayTutor();
 
 	while (userInput == 1)
 	{
@@ -285,6 +287,7 @@ void addTutor()
 
 		//get row size
 		int row = getRow();
+		tutorID = stoi(TutorArray[row - 1][0]) + 1;
 
 		TutorArray[row][0] = to_string(tutorID);
 		TutorArray[row][1] = name;
@@ -299,8 +302,6 @@ void addTutor()
 		TutorArray[row][10] = subjectCode;
 		TutorArray[row][11] = subjectName;
 		TutorArray[row][12] = to_string(rating);
-
-		tutorID++;
 
 		// ask user if they want to add additional tutor list
 		cout << endl << "Do you want to add additional tutor record? 1- Yes, Others- No: ";
@@ -515,7 +516,7 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 {
 	if (sortField == 1) 
 	{
-		//tutor Id
+		// tutor Id
 		int pivot = stoi(TutorArray[start][0]);
 
 		int count = 0;
@@ -550,7 +551,7 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 	}
 	else if (sortField == 2)
 	{
-		//hourly pay rate
+		// hourly pay rate
 		double pivot = stod(TutorArray[start][4]);
 
 		int count = 0;
@@ -585,7 +586,7 @@ int partition(string TutorArray[][13], int start, int end, int sortField)
 	}
 	else if (sortField == 3)
 	{
-		//rating
+		// rating
 		double pivot = stod(TutorArray[start][12]);
 
 		int count = 0;
@@ -687,8 +688,6 @@ bool linearSearch()
 			// Update position
 			position++;
 		}
-		// print print out the index
-
 	}
 	else if (searchType == 2)
 	{
@@ -724,7 +723,7 @@ bool linearSearch()
 
 // LOGIN
 int login() {
-	//variables to authenticate and determine user type
+	// variables to authenticate and determine user type
 	int userType;
 	int userInput = 1;
 	int status = 0;
@@ -793,6 +792,8 @@ int login() {
 }
 
 
+
+
 // MAIN FUNCTION
 int main()
 {
@@ -801,7 +802,7 @@ int main()
 	int sortField = 0;
 	int status = login();
 
-	//timmer
+	// timmer
 	auto sttar = high_resolution_clock::now();
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - sttar);
@@ -893,9 +894,6 @@ int main()
 
 						quickSort(TutorArray, 0, getRow() - 1, 1);
 					}
-
-
-
 				} while (cin.fail() || (sortField != 1 && sortField != 2 && sortField != 3));
 				continue;
 			case 5:
@@ -1011,9 +1009,6 @@ int main()
 			}
 		}
 	}
-
-
-
 
 	return 0;
 }

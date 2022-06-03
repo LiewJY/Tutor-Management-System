@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS 1
+
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -78,7 +80,7 @@ Tutor* createNewNode(int tutorID, string name, string dateJoined, string dateTer
 
 
 // DISPLAY
-//display individual record
+// display individual record
 void displayDetails(int position, Tutor* current)
 {
 	cout << string(40, '-') << " [" << "Position: " << position << "] " << string(40, '-') << endl;
@@ -100,8 +102,6 @@ void displayDetails(int position, Tutor* current)
 // display tutor list for process function and main function
 void displayTutor()
 {
-	//while (head->previousAddress != NULL)
-	//	head = head->previousAddress;
 	Tutor* current = head;
 
 	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
@@ -123,13 +123,22 @@ void predefinedTutorList()
 	// empty the list
 	head = tail = NULL;
 
-	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 3);
+	Tutor* newNode = createNewNode(1, "John", "20/1/2018", "30/6/2019", 62.00, "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS2232", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", 4);
 	addTutorProcess(newNode);
 
-	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 2);
+	newNode = createNewNode(2, "May", "6/3/2018", "NA", 75.00, "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS2232", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", 5);
 	addTutorProcess(newNode);
 
-	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 1);
+	newNode = createNewNode(3, "Brian", "3/8/2019", "NA", 68.00, "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", 4);
+	addTutorProcess(newNode);
+
+	newNode = createNewNode(4, "Tom", "5/4/2020", "30/5/2021", 55.80, "tom@gmail.com", "0163423143", "16, Jalan Kajang, Bandar Kajang, 43000 Kajang, Selangor.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "CHE5622", "Chemistry", 3);
+	addTutorProcess(newNode);
+
+	newNode = createNewNode(5, "Chan", "9/20/2017", "NA", 78.00, "chan@gmail.com", "0126454328", "21, Jalan Low Ti Kok, Bandar Kajang, 43000 Kajang, Selangor.", "KAJ2015", "eXcel Tuition Center (Kajang)", "ENG5932", "English", 5);
+	addTutorProcess(newNode);
+
+	newNode = createNewNode(6, "Lee", "3/1/2019", "18/3/2022", 63.50, "lee@gmail.com", "0173354598", "2-26, Jalan Bukit Mewah 1, Taman Bukit Mewah, 43000 Kajang, Selangor.", "KAJ2015", "eXcel Tuition Center (Kajang)", "SEJ8866", "Sejarah", 4);
 	addTutorProcess(newNode);
 }
 
@@ -140,7 +149,7 @@ void addTutor()
 {
 	// variables to read from user input
 	int userInput = 1;
-	int tutorID = 4;
+	int tutorID;
 	string name;
 	int day = 1;
 	int month = 1;
@@ -346,12 +355,12 @@ void addTutor()
 			}
 		} while (cin.fail() || rating < 1 || rating > 5);
 
+		tutorID = tail->tutorID + 1;
+		 
 		Tutor* newNode = createNewNode(tutorID, name, dateJoined, dateTerminated, hourlyPayRate, email,
 			phoneNumber, address, tuitionCenterCode, tuitionCenterName, subjectCode, subjectName, rating);
 
 		addTutorProcess(newNode);
-
-		tutorID++;
 
 		displayTutor();
 
@@ -460,7 +469,7 @@ void updateTutor(Tutor* head)
 	// the tutor id entered by user matched with tutor id in linked list
 	if (current->tutorID == searchTutorID)
 	{
-		displayTutor();
+		displayDetails(position, current);
 
 		do
 		{
@@ -550,6 +559,30 @@ void updateTutor(Tutor* head)
 
 
 // DELETE
+// check if date terminated > 6 months before deletion
+bool getDifference(int day, int month, int year)
+{
+	bool pass = false;
+	int terminated, current, differences;
+
+	// calculate termimated months
+	terminated = year * 12 + month;
+
+	time_t t = time(0);
+	tm* timePtr = localtime(&t);
+	// calculate current months
+	current = timePtr->tm_mon + (timePtr->tm_year + 1900) * 12;
+	// calcualte difference
+	differences = current - terminated;
+
+	if (differences >= 6)
+	{
+		pass = true;
+	}
+
+	return pass;
+}
+
 // delete tutor list from specific location
 void deleteTutorProcess(int position)
 {
@@ -564,42 +597,72 @@ void deleteTutorProcess(int position)
 	{
 		Tutor* current = head; // set current to first position
 		head = head->nextAddress; // set head to next position
+		string terminationDate = current->dateTerminated;
+		int day, month, year;
 
-		// if head is not empty, set the previous address of head to empty
-		if (head != NULL)
+		sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
+
+		if (current->dateTerminated == "NA")
 		{
-			head->previousAddress = NULL;
+			cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
 		}
-		// if head is empty, set the tail to empty as well
+		else if (getDifference(day, month, year) == true)
+		{
+			// if head is not empty, set the previous address of head to empty
+			if (head != NULL)
+			{
+				head->previousAddress = NULL;
+			}
+			// if head is empty, set the tail to empty as well
+			else
+			{
+				tail = NULL;
+			}
+			
+			cout << "\"" << current->name << "\" record deleted successfully!" << endl << endl << endl;
+			delete current;
+			sizeofLinkedList--;
+		}
 		else
 		{
-			tail = NULL;
+			cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
 		}
-
-		cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
-		delete current;
-		sizeofLinkedList--;
 	}
 	// case 3: last position
 	else if (position == ::sizeofLinkedList)
 	{
 		Tutor* current = tail; // set current to last position
 		tail = tail->previousAddress; // set tail to previous address
+		string terminationDate = current->dateTerminated;
+		int day, month, year;
 
-		// if tail is not empty, set the next address of tail to empty
-		if (tail != NULL)
+		sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
+
+		if (current->dateTerminated == "NA")
 		{
-			tail->nextAddress = NULL;
+			cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
 		}
-		// if tail is empty, set the head to empty as well
+		else if (getDifference(day, month, year) == true)
+		{
+			// if tail is not empty, set the next address of tail to empty
+			if (tail != NULL)
+			{
+				tail->nextAddress = NULL;
+			}
+			// if tail is empty, set the head to empty as well
+			else
+			{
+				head = NULL;
+			}
+			
+			cout << "\"" << current->name << "\" record deleted successfully!" << endl << endl << endl;
+			delete current;
+			sizeofLinkedList--;
+		}
 		else
 		{
-			head = NULL;
+			cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
 		}
-
-		cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
-		delete current;
-		sizeofLinkedList--;
 	}
 	// case 4: middle position
 	else
@@ -607,24 +670,40 @@ void deleteTutorProcess(int position)
 		Tutor* current = head->nextAddress; // set current to next position
 		int currentPosition = 2; // set position to 2 = in the middle position
 
-		while (current != NULL)
-		{
-			if (currentPosition == position)
+			while (current != NULL)
 			{
-				// set current previous address's next address to current next address
-				current->previousAddress->nextAddress = current->nextAddress;
-				// set current next address's previous address to current previous address
-				current->nextAddress->previousAddress = current->previousAddress;
+				if (currentPosition == position)
+				{
+					string terminationDate = current->dateTerminated;
+					int day, month, year;
 
-				cout << "\"" << current->name << "\" record is deleted successfully!" << endl << endl << endl;
-				delete current;
-				sizeofLinkedList--;
-				return;
+					sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
+
+					if (current->dateTerminated == "NA")
+					{
+						cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
+					}
+					else if (getDifference(day, month, year) == true)
+					{
+						// set current previous address's next address to current next address
+						current->previousAddress->nextAddress = current->nextAddress;
+						// set current next address's previous address to current previous address
+						current->nextAddress->previousAddress = current->previousAddress;
+					
+						cout << "\"" << current->name << "\" record deleted successfully!" << endl << endl << endl;
+						delete current;
+						sizeofLinkedList--;
+						return;
+					}
+					else
+					{
+						cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
+					}
+				}
+
+				current = current->nextAddress;
+				currentPosition++;
 			}
-
-			current = current->nextAddress;
-			currentPosition++;
-		}
 	}
 }
 
@@ -968,8 +1047,7 @@ int main()
 	int sortField = 0;
 	int status = login();
 
-
-	//timmer
+	// timmer
 	auto start = high_resolution_clock::now();
 	auto stop = high_resolution_clock::now();
 	auto duration = duration_cast<microseconds>(stop - start);
