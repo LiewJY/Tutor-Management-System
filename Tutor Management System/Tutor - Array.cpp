@@ -13,7 +13,6 @@ using namespace std::chrono;
 string TutorArray[100][13] = {
 	{"1", "John", "20/1/2018", "30/6/2019", "62.00", "john@gmail.com", "0123456789", "6, Jalan Cheras, Taman Cheras, 56100 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "PHY1234", "Physics", "3"},
 	{"2", "May", "6/3/2018", "NA", "75.00", "may@gmail.com", "0184628592", "15, Jalan Salak, Taman Tun Razak, 57000 Chearas, Kuala Lumpur.", "CRS1001", "eXcel Tuition Center (Cheras)", "AM2280", "Additional Mathematics", "5"},
-
 	{"3", "Brian", "3/8/2019", "NA", "68.00", "brian@gmail.com", "0118427585", "23-A, Jalan Jalil, 57000 Bukit Jalil, Kuala Lumpur.", "BKJ1001", "eXcel Tuition Center (Bukit Jalil)", "MAT3125", "Mathematics", "4"}
 };
 
@@ -62,6 +61,7 @@ void displayTutor()
 
 	while (row < getRow())
 	{
+
 		displayDetails(row);
 
 		row++;
@@ -435,7 +435,78 @@ void updateTutor()
 
 // DELETE
 // delete tutor for main function
-void deleteTutor();
+void deleteTutor() {
+	string tempName;
+	int userInput = 1;
+
+	while (userInput == 1)
+	{
+		displayTutor();
+
+		do
+		{
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Enter the position of tutor record that you want to delete: ";
+			cin >> userInput;
+			cout << endl;
+
+			if (cin.fail() || userInput < 1 || userInput > getRow())
+			{
+				cout << "Invalid position! Please enter a valid position!" << endl << endl;
+			}
+		} while (cin.fail() || userInput < 1 || userInput > getRow());
+
+		// DELETE CODE
+		for (int i = 0; i < getRow(); i++)
+		{
+			//delete record form selected position
+			if (i == userInput - 1)
+			{
+				tempName = TutorArray[i][1];
+				//shift foward
+				for (int move = i; move < (getRow() - 1); move++)
+				{
+					for (int col = 0; col < 12; col++)
+					{
+						TutorArray[move][col] = TutorArray[move + 1][col];
+					}
+				}
+				//exit for loop
+				break;
+
+			}
+		}
+		// clear last row
+		int lastRow = getRow() - 1;
+		for (int clearRow = 0; clearRow < 12; clearRow++)
+		{
+			TutorArray[lastRow][clearRow] = "";
+		}
+
+		cout <<  "\"" << tempName << "\" record is deleted successfully!" << endl << endl << endl;
+
+
+		displayTutor();
+
+		do
+		{
+			// ask user if they want to delete additional tutor list
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "Do you want to delete additional tutor record?" << endl;
+			cout << "(1) Yes // (0) No" << endl << endl;
+			cout << "Please enter an option: ";
+			cin >> userInput;
+			cout << endl << endl;
+
+			if (cin.fail() || (userInput != 1 && userInput != 0))
+			{
+				cout << "Invalid option! Please enter a valid option!" << endl << endl;
+			}
+		} while (cin.fail() || (userInput != 1 && userInput != 0));
+	}
+}
 
 
 // SORT
@@ -831,9 +902,9 @@ int main()
 				cout << endl << endl;
 				updateTutor();
 				continue;
-			//case 6:
-			//	cout << endl << endl;
-			//	deleteTutor();
+			case 6:
+				cout << endl << endl;
+				deleteTutor();
 				continue;
 			case 0:
 				exit(0);
