@@ -679,8 +679,6 @@ void deleteTutorProcess(int position)
 
 					sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
 
-					cout << endl << terminationDate << endl;
-
 					if (current->dateTerminated == "NA")
 					{
 						cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
@@ -706,7 +704,6 @@ void deleteTutorProcess(int position)
 				current = current->nextAddress;
 				currentPosition++;
 			}
-
 	}
 }
 
