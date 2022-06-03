@@ -78,7 +78,7 @@ void addTutor()
 {
 	// variables to read from user input
 	int userInput = 1;
-	int tutorID = 7;
+	int tutorID;
 	string name;
 	int day = 1;
 	int month = 1;
@@ -286,6 +286,7 @@ void addTutor()
 
 		//get row size
 		int row = getRow();
+		tutorID = stoi(TutorArray[row - 1][0]) + 1;
 
 		TutorArray[row][0] = to_string(tutorID);
 		TutorArray[row][1] = name;
@@ -300,8 +301,6 @@ void addTutor()
 		TutorArray[row][10] = subjectCode;
 		TutorArray[row][11] = subjectName;
 		TutorArray[row][12] = to_string(rating);
-
-		tutorID++;
 
 		// ask user if they want to add additional tutor list
 		cout << endl << "Do you want to add additional tutor record? 1- Yes, Others- No: ";

@@ -102,8 +102,6 @@ void displayDetails(int position, Tutor* current)
 // display tutor list for process function and main function
 void displayTutor()
 {
-	//while (head->previousAddress != NULL)
-	//	head = head->previousAddress;
 	Tutor* current = head;
 
 	cout << string(40, '-') << " TUTOR RECORD LIST " << string(40, '-') << endl << endl;
@@ -151,7 +149,7 @@ void addTutor()
 {
 	// variables to read from user input
 	int userInput = 1;
-	int tutorID = 7;
+	int tutorID;
 	string name;
 	int day = 1;
 	int month = 1;
@@ -357,12 +355,12 @@ void addTutor()
 			}
 		} while (cin.fail() || rating < 1 || rating > 5);
 
+		tutorID = tail->tutorID + 1;
+		 
 		Tutor* newNode = createNewNode(tutorID, name, dateJoined, dateTerminated, hourlyPayRate, email,
 			phoneNumber, address, tuitionCenterCode, tuitionCenterName, subjectCode, subjectName, rating);
 
 		addTutorProcess(newNode);
-
-		tutorID++;
 
 		displayTutor();
 
@@ -471,7 +469,7 @@ void updateTutor(Tutor* head)
 	// the tutor id entered by user matched with tutor id in linked list
 	if (current->tutorID == searchTutorID)
 	{
-		displayDetails(position + 1, current);
+		displayDetails(position, current);
 
 		do
 		{
@@ -671,40 +669,44 @@ void deleteTutorProcess(int position)
 	{
 		Tutor* current = head->nextAddress; // set current to next position
 		int currentPosition = 2; // set position to 2 = in the middle position
-		string terminationDate = current->dateTerminated;
-		int day, month, year;
 
-		sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
-
-		if (current->dateTerminated == "NA")
-		{
-			cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
-		}
-		else if (getDifference(day, month, year) == true)
-		{
 			while (current != NULL)
 			{
 				if (currentPosition == position)
 				{
-					// set current previous address's next address to current next address
-					current->previousAddress->nextAddress = current->nextAddress;
-					// set current next address's previous address to current previous address
-					current->nextAddress->previousAddress = current->previousAddress;
+					string terminationDate = current->dateTerminated;
+					int day, month, year;
+
+					sscanf_s(terminationDate.c_str(), "%d/%d/%d", &day, &month, &year);
+
+					cout << endl << terminationDate << endl;
+
+					if (current->dateTerminated == "NA")
+					{
+						cout << "Date terminated is not available! Please update tutor record and set a date terminated!" << endl << endl;
+					}
+					else if (getDifference(day, month, year) == true)
+					{
+						// set current previous address's next address to current next address
+						current->previousAddress->nextAddress = current->nextAddress;
+						// set current next address's previous address to current previous address
+						current->nextAddress->previousAddress = current->previousAddress;
 					
-					cout << "\"" << current->name << "\" record deleted successfully!" << endl << endl << endl;
-					delete current;
-					sizeofLinkedList--;
-					return;
+						cout << "\"" << current->name << "\" record deleted successfully!" << endl << endl << endl;
+						delete current;
+						sizeofLinkedList--;
+						return;
+					}
+					else
+					{
+						cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
+					}
 				}
 
 				current = current->nextAddress;
 				currentPosition++;
 			}
-		}
-		else
-		{
-			cout << "Failed to delete! Date terminated is less than 6 months!" << endl << endl << endl;
-		}
+
 	}
 }
 
